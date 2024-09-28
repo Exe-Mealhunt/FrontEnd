@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#fffad6",
-        secondary: "#f58661",
+        secondary: "#fd5a03",
       },
       fontFamily: {
         cormorant: ["Cormorant", "serif"],

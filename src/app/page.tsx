@@ -3,120 +3,58 @@ import Image from "next/image";
 import ListCategory from "@/components/list_category";
 import HeroImg from "../assets/meal_hero.jpg";
 import HomeCard from "@/components/card/home_card";
+import RecipeCard from "@/components/card/recipe_card";
 
-const categories = [
-  {
-    name: "Appetizer",
-    image: "https://picsum.photos/200/300",
-    link: "/appetizer",
-  },
-  {
-    name: "Bakery",
-    image: "https://picsum.photos/200/301",
-    link: "/bakery",
-  },
-  {
-    name: "Beverages",
-    image: "https://picsum.photos/200/302",
-    link: "/beverages",
-  },
-  {
-    name: "Desserts",
-    image: "https://picsum.photos/200/303",
-    link: "/desserts",
-  },
-  {
-    name: "Dinner",
-    image: "https://picsum.photos/200/304",
-    link: "/dinner",
-  },
-  {
-    name: "Lunch",
-    image: "https://picsum.photos/200/305",
-    link: "/lunch",
-  },
-  {
-    name: "Salad",
-    image: "https://picsum.photos/200/306",
-    link: "/salad",
-  },
-];
+import { newDish, categories } from "./mock_data";
 
-const newDish = [
-  {
-    image: "https://picsum.photos/400/206",
-    title: "Thai Basil Chicken",
-    description:
-      "Stir-fried chicken with Thai basil, chilies, and garlic, served with steamed jasmine rice.",
-  },
-  {
-    image: "https://picsum.photos/400/207",
-    title: "Creamy Mushroom Pasta",
-    description:
-      "Fettuccine tossed in a creamy mushroom sauce, topped with parmesan cheese and fresh parsley.",
-  },
-  {
-    image: "https://picsum.photos/400/208",
-    title: "Japanese Teriyaki Salmon",
-    description:
-      "Grilled salmon fillet glazed with a sweet and savory teriyaki sauce, served with steamed bok choy.",
-  },
-  {
-    image: "https://picsum.photos/400/209",
-    title: "Indian Butter Chicken",
-    description:
-      "Marinated chicken cooked in a rich butter tomato sauce, served with basmati rice and naan bread.",
-  },
-  {
-    image: "https://picsum.photos/400/210",
-    title: "Korean BBQ Beef",
-    description:
-      "Grilled beef short ribs marinated in a sweet and spicy Korean BBQ sauce, served with steamed kimchi.",
-  },
-  {
-    image: "https://picsum.photos/400/211",
-    title: "Vegan Black Bean Chili",
-    description:
-      "A hearty and flavorful vegan chili made with black beans, sweet potatoes, and a blend of spices.",
-  },
-  {
-    image: "https://picsum.photos/400/212",
-    title: "Roasted Vegetable Salad",
-    description:
-      "A colorful salad made with roasted vegetables such as sweet potatoes, Brussels sprouts, and cauliflower, tossed with a citrus vinaigrette.",
-  },
-  {
-    image: "https://picsum.photos/400/213",
-    title: "Grilled Chicken Caesar Salad",
-    description:
-      "A classic Caesar salad made with grilled chicken, romaine lettuce, croutons, and parmesan cheese, tossed with a tangy Caesar dressing.",
-  },
-  {
-    image: "https://picsum.photos/400/214",
-    title: "Creamy Tomato Soup",
-    description:
-      "A comforting and creamy tomato soup made with fresh tomatoes and herbs, served with a side of crusty bread.",
-  },
-];
 export default function Page() {
   return (
     <div className="bg-primary">
       <div className="grid grid-cols-2">
         <div className="flex items-center justify-end text-right h-full">
           <div className="flex flex-col items-end justify-center">
-            <h1 className="text-7xl font-bold text-black p-4 font-cormorant w-full">
+            <h1 className="text-7xl font-bold text-black p-4 cormorant-bold w-full">
               Every Bite
             </h1>
 
             <div className="flex">
-              <h1 className="text-6xl font-bold text-black font-cormorant w-full pt-14">
-                Tells&nbsp;a
+              <h1 className="text-6xl font-bold text-black cormorant-bold w-full p-4 pt-14">
+                Tells a
               </h1>
-              <h1 className="text-9xl font-bold text-secondary font-cormorant w-full">
-                &nbsp;Flavor
+              <h1 className="text-9xl font-bold text-secondary cormorant-bold w-full pr-4">
+                Flavor
               </h1>
             </div>
+
+            <h2 className="text-secondary bonheur-royale-regular text-3xl font-bold text-right pr-20">
+              Hi There! We&rsquo;re MealHunt,
+            </h2>
+            <h2 className="text-black cormorant-bold text-1xl font-bold text-right pr-20 w-96">
+              The cook, writer and photographer behind this little blog. We’ve
+              picked up their love for food along the way, and with this blog,
+              We share our food story with you.
+            </h2>
+
+            <a
+              href="https://www.facebook.com/profile.php?id=61566404104949&is_tour_dismissed&locale=vi_VN"
+              target="_blank"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                viewBox="0 0 256 256"
+                style={{ marginRight: "10rem" }}
+              >
+                <g fill="#fd5904" fillRule="nonzero">
+                  <g transform="scale(8.53333,8.53333)">
+                    <path d="M15,3c-6.627,0 -12,5.373 -12,12c0,6.016 4.432,10.984 10.206,11.852v-8.672h-2.969v-3.154h2.969v-2.099c0,-3.475 1.693,-5 4.581,-5c1.383,0 2.115,0.103 2.461,0.149v2.753h-1.97c-1.226,0 -1.654,1.163 -1.654,2.473v1.724h3.593l-0.487,3.154h-3.106v8.697c5.857,-0.794 10.376,-5.802 10.376,-11.877c0,-6.627 -5.373,-12 -12,-12z" />
+                  </g>
+                </g>
+              </svg>
+            </a>
           </div>
+          <div></div>
         </div>
         <Image
           src={HeroImg}
@@ -126,18 +64,19 @@ export default function Page() {
         />
       </div>
 
-      <div className="bg-secondary p-12">
-        <div className="justify-center">
-          <h1 className="flex justify-center text-6xl text-primary pb-10 font-cormorant w-full md:text-8xl">
-            Explore By Category
-          </h1>
-          <ListCategory categories={categories} />
-        </div>
+      <div className="bg-secondary p-14 justify-center">
+        <h1 className="flex justify-center text-6xl text-primary pb-8 cormorant-bold w-full md:text-8xl">
+          Explore By
+        </h1>
+        <h1 className="flex justify-center text-6xl text-primary pb-10 bonheur-royale-regular w-full md:text-8xl">
+          Category
+        </h1>
+        <ListCategory categories={categories} />
       </div>
 
       <div>
         <div className="mt-40">
-          <h2 className="flex justify-center text-black text-6xl font-cormorant p-20">
+          <h2 className="flex justify-center text-black text-6xl cormorant-bold p-20">
             Latest Recipes
           </h2>
         </div>
@@ -158,6 +97,24 @@ export default function Page() {
           >
             Explore All
           </a>
+        </div>
+      </div>
+
+      <div>
+        <div className="bg-[#9baad0] p-14 justify-center">
+          <h1 className="flex justify-center text-6xl text-black pb-8 cormorant-bold w-full md:text-8xl">
+            We love our
+          </h1>
+          <h1 className="flex justify-center text-6xl text-black bonheur-royale-regular w-full md:text-8xl">
+            lunch
+          </h1>
+          <div className="grid grid-cols-3 gap-4 m-20 mb-0 rounded-md">
+            {newDish.slice(0, 3).map((dish, index) => (
+              <div key={index}>
+                <RecipeCard dish={dish} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
