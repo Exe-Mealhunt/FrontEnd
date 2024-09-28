@@ -109,12 +109,12 @@ export default function Page() {
             </h1>
 
             <div className="flex">
-            <h1 className="text-6xl font-bold text-black font-cormorant w-full pt-14">
-              Tells&nbsp;a
-            </h1>
-            <h1 className="text-9xl font-bold text-secondary font-cormorant w-full">
-              &nbsp;Flavor
-            </h1>
+              <h1 className="text-6xl font-bold text-black font-cormorant w-full pt-14">
+                Tells&nbsp;a
+              </h1>
+              <h1 className="text-9xl font-bold text-secondary font-cormorant w-full">
+                &nbsp;Flavor
+              </h1>
             </div>
           </div>
         </div>
@@ -143,20 +143,22 @@ export default function Page() {
         </div>
 
         <div className="bg-[#f2fbb0] grid grid-cols-3 gap-4 m-20 mb-0 rounded-md">
-  {newDish.slice(0, 8).map((dish, index) => (
-    <div
-      key={index}
-      className={`relative ${index % 3 === 1 ? "-translate-y-1/4 z-10" : ""}`}
-    >
-      <HomeCard dish={dish} />
-    </div>
-  ))}
+          {newDish.slice(0, 8).map((dish, index) => (
+            <div
+              key={index}
+              className={`relative ${index % 3 === 1 ? "-translate-y-1/4 z-10" : ""}`}
+            >
+              <HomeCard dish={dish} />
+            </div>
+          ))}
 
-<a href="/recipes" className="flex justify-center items-center bg-[#46500c] text-black text-xl font-bold transition-transform duration-300 transform hover:scale-105 cursor-pointer p-4">
-  Explore All
-</a>
-</div>
-
+          <a
+            href="/recipes"
+            className="flex justify-center items-center bg-[#46500c] text-black text-xl font-bold transition-transform duration-300 transform hover:scale-105 cursor-pointer p-4"
+          >
+            Explore All
+          </a>
+        </div>
       </div>
     </div>
   );

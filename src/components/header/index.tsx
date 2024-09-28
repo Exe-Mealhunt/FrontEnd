@@ -52,12 +52,12 @@ export default function Header() {
           </div>
         </div>
         <a className="normal-case text-xl text-black" href="/">
-        <Image
-          src={Logo}
-          alt="Picture of the author"
-          width={75}
-          height={75}
-        />
+          <Image
+            src={Logo}
+            alt="Picture of the author"
+            width={75}
+            height={75}
+          />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex gap-x-8">
