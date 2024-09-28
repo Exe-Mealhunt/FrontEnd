@@ -1,20 +1,16 @@
+import Image from "next/image";
+
 type dishType = {
   image: string;
   title: string;
   description: string;
 };
 
-export interface Dish {
-  image: string;
-  title: string;
-  description: string;
-}
-
-export default function HomeCard({ dish }: { dish: Dish }) {
+export default function HomeCard({ dish }: { dish: dishType }) {
   return (
     <div className="card w-96 m-3 relative group">
       <figure className="relative">
-        <img src={dish.image} alt={dish.title} className="w-full h-auto" />
+        <Image src={dish.image} alt={dish.title} className="w-full h-auto" />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <p className="text-3xl font-bold">See the recipe</p>
         </div>
