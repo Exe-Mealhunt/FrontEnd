@@ -9,11 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#fffad6",
+        secondary: "#f58661",
+      },
+      fontFamily: {
+        cormorant: ["Cormorant", "serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };
 export default config;
