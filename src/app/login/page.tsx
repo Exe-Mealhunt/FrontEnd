@@ -9,7 +9,9 @@ export default function Page() {
       <Image src={logoImg} alt="login" fill className="object-cover" />
       <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
         <form className="w-full max-w-md bg-primary p-10">
-          <h1 className="text-3xl font-medium text-center mb-6">Login</h1>
+          <h1 className="text-3xl font-medium text-center mb-6 text-black">
+            Login
+          </h1>
 
           <div className="flex justify-center mb-6">
             <span className=" font-medium text-sm text-black">
@@ -31,7 +33,7 @@ export default function Page() {
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
               placeholder="Email"
@@ -45,7 +47,7 @@ export default function Page() {
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="Password"

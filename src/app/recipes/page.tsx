@@ -23,7 +23,7 @@ export default function RecipesPage() {
 
   return (
     <div className="bg-primary">
-      <div className="container mx-auto p-20 bg-white w-full">
+      <div className="container mx-auto p-20 bg-white w-full md:w-11/12">
         <div className="w-full">
           <h1 className="text-8xl text-black text-center font-bold cormorant-bold">
             MealHunt&nbsp;
@@ -40,19 +40,19 @@ export default function RecipesPage() {
         </div>
       </div>
 
-      <div className="flex justify-around mt-10">
+      <div className="flex justify-center mt-10 md:mx-40">
         <SearchInput />
       </div>
 
-      <div className="flex justify-between mx-40 mt-10">
+      <div className="flex justify-between mx-40 mt-10 md:flex-wrap md:justify-center">
         {categories.map((category, index) => (
-          <div key={index} className="mx-3">
+          <div key={index} className="mx-3 md:mx-1 md:mb-5">
             <ListCategoryBtn title={category.name} />
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-2 m-20 mb-0 rounded-md">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 m-20 mb-0 rounded-md">
         {newDish.slice(indexOfFirstDish, indexOfLastDish).map((dish, index) => (
           <div key={index}>
             <RecipeCard dish={dish} />
@@ -60,7 +60,7 @@ export default function RecipesPage() {
         ))}
       </div>
 
-      <div className="flex justify-end py-10 mr-36">
+      <div className="flex justify-end py-10 mr-36 md:mr-36">
         <Pagination
           currentPage={currentPage}
           onPageChange={handlePageChange}
