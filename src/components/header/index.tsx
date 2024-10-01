@@ -8,10 +8,12 @@ export default function Header() {
   const path = usePathname();
 
   const isActive = (href: string) =>
-    path === href ? "active text-secondary" : "text-black hover:text-secondary";
+    path === href
+      ? "active font-medium text-lg text-secondary"
+      : "font-medium text-black text-lg hover:text-secondary";
 
   return (
-    <div className="navbar bg-primary">
+    <div className="navbar bg-primary px-8">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -51,7 +53,7 @@ export default function Header() {
             </a>
           </div>
         </div>
-        <a className="normal-case text-xl text-black" href="/">
+        <a className="normal-case text-xl font-medium text-black" href="/">
           <Image
             src={Logo}
             alt="Picture of the author"
