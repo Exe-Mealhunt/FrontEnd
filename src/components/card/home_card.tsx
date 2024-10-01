@@ -8,7 +8,7 @@ type dishType = {
 
 export default function HomeCard({ dish }: { dish: dishType }) {
   return (
-    <div className="card w-96 m-3 relative group">
+    <div className="card w-96 m-3 relative group rounded-none">
       <figure className="relative">
         <Image src={dish.image} alt={dish.title} width={400} height={206} />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -70,4 +70,3 @@ export default function RecipesPage() {
     </div>
   );
 }
-

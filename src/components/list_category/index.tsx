@@ -21,7 +21,7 @@ export default function CategoryList({
         <Link
           key={category.name}
           href={category.link}
-          className={`bg-primary transition-transform duration-300 ease-in-out md:w-1/3 w-full md:mx-4 mx-2 md:mb-0 mb-4`}
+          className={`bg-primary transition-transform duration-500 ease-in-out md:w-1/3 w-full md:mx-4 mx-2 md:mb-0 mb-4`}
           style={{
             transform: `rotate(${categories.indexOf(category) % 2 === 0 ? "-20deg" : "20deg"})`,
           }}
