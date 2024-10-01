@@ -23,22 +23,22 @@ export default function CategoryList({
           href={category.link}
           className={`bg-primary transition-transform duration-500 ease-in-out md:w-1/3 w-full md:mx-4 mx-2 md:mb-0 mb-4`}
           style={{
-            transform: `rotate(${categories.indexOf(category) % 2 === 0 ? "-20deg" : "20deg"})`,
+            transform: `rotate(${categories.indexOf(category) % 2 === 0 ? "-25deg" : "25deg"})`,
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = `rotate(${categories.indexOf(category) % 2 === 0 ? "0deg" : "0deg"})`;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = `rotate(${categories.indexOf(category) % 2 === 0 ? "-20deg" : "20deg"})`;
+            e.currentTarget.style.transform = `rotate(${categories.indexOf(category) % 2 === 0 ? "-25deg" : "25deg"})`;
           }}
         >
-          <div className="bg-primary m-1 p-1 transition duration-300">
+          <div className="transition duration-300">
             <Image
               src={category.image}
               alt={category.name}
               width={150}
               height={150}
-              className="md:h-64 md:w-full w-full h-56"
+              className="md:h-64 md:w-full w-full h-56 border-8 border-primary"
             />
             <p className="text-center font-cormorant text-black font-bold text-xl md:text-2xl">
               {category.name}
