@@ -81,7 +81,7 @@ export default function Page() {
           </h2>
         </div>
 
-        <div className="bg-[#f2fbb0] grid grid-cols-3 gap-4 m-20 mb-0 rounded-md">
+        <div className="bg-[#f2fbb0] grid grid-cols-1 md:grid-cols-3 gap-4 m-20 mb-0 rounded-md">
           {newDish.slice(0, 8).map((dish, index) => (
             <div
               key={index}
@@ -108,8 +108,8 @@ export default function Page() {
           <h1 className="flex justify-center text-6xl text-black bonheur-royale-regular w-full md:text-8xl">
             lunch
           </h1>
-          <div className="grid grid-cols-3 gap-4 m-20 mb-0 rounded-md">
-            {newDish.slice(0, 3).map((dish, index) => (
+          <div className="grid grid-cols-4 gap-4 m-20 mb-0 rounded-md">
+            {newDish.slice(0, 4).map((dish, index) => (
               <div key={index}>
                 <RecipeCard dish={dish} />
               </div>

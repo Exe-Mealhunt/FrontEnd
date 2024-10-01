@@ -1,12 +1,26 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import RecipeCard from "@/components/card/recipe_card";
 
 import ListCategoryBtn from "@/components/button/list_category_btn";
 import SearchInput from "@/components/input/search_input";
+import Pagination from "@/components/pagination";
 
 import { newDish, categories } from "../mock_data";
 
 export default function RecipesPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const totalPages = Math.ceil(newDish.length / itemsPerPage);
+
+  const indexOfLastDish = currentPage * itemsPerPage;
+  const indexOfFirstDish = indexOfLastDish - itemsPerPage;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="bg-primary">
       <div className="container mx-auto p-20 bg-white w-full">
@@ -39,12 +53,21 @@ export default function RecipesPage() {
       </div>
 
       <div className="grid grid-cols-4 gap-2 m-20 mb-0 rounded-md">
-        {newDish.map((dish, index) => (
+        {newDish.slice(indexOfFirstDish, indexOfLastDish).map((dish, index) => (
           <div key={index}>
             <RecipeCard dish={dish} />
           </div>
         ))}
       </div>
+
+      <div className="flex justify-end py-10 mr-36">
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+          totalPages={totalPages}
+        />
+      </div>
     </div>
   );
 }
+
