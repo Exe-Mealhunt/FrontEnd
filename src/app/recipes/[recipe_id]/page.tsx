@@ -10,28 +10,30 @@ import { newDish } from "@/app/mock_data";
 export default function Detail() {
   return (
     <div className="bg-primary p-14">
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-5 md:gap-10 xl:gap-16">
         <Image
           src={logoImg}
           alt="login"
-          className="h-[350px] w-[600px] border-4 border-[#46500c]"
+          className="h-[350px] w-full md:h-[450px] md:w-[800px] xl:h-[550px] xl:w-[1100px] object-cover"
         />
 
-        <div>
-          <div className="flex ">
-            <button className="btn text-lg bg-secondary text-white border-none rounded-none hover:bg-secondary/90">
+        <div className="flex flex-col justify-center">
+          <div className="flex items-center">
+            <button className="btn text-lg bg-secondary text-white border-none rounded-none hover:bg-secondary/90 md:text-xl xl:text-2xl">
               Desserts
             </button>
 
-            <div className="text-lg pl-5 text-black"> July 12, 2023</div>
+            <div className="text-lg md:text-xl xl:text-2xl pl-5 text-black md:pl-10 xl:pl-16">
+              July 12, 2023
+            </div>
           </div>
           {/* Title */}
-          <h1 className="cormorant-bold text-7xl mb-7 text-black">
+          <h1 className="cormorant-bold text-7xl md:text-8xl xl:text-9xl mb-7 text-black">
             Traditional Italian pizza
           </h1>
 
           {/* Introduce */}
-          <p className="font-medium text-black">
+          <p className="font-medium text-black md:text-lg xl:text-xl">
             A pizza recipe with a twist, featuring a folded pizza dough filled
             with tomato sauce, mozzarella cheese, and Italian sausage or other
             meat, creating a delicious and portable meal.
@@ -40,8 +42,8 @@ export default function Detail() {
       </div>
 
       {/* Recipe */}
-      <div className="pt-20 grid grid-cols-2 gap-16">
-        <div className="overflow-y-auto">
+      <div className="pt-20 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-10 xl:gap-16">
+        <div className="overflow-y-auto md:max-h-[600px] xl:max-h-[750px]">
           <h5 className="cormorant-bold text-4xl pb-5 text-black">
             Jump to recipe
           </h5>
@@ -139,7 +141,7 @@ export default function Detail() {
         </div>
 
         <div className="bg-primary">
-          <div className="bg-white border-2 border-black p-9">
+          <div className="bg-white border-2 border-black p-9 md:p-10 xl:p-14">
             <h5 className="cormorant-bold text-4xl py-5 text-black">
               Ingredients:
             </h5>
@@ -193,9 +195,11 @@ export default function Detail() {
         </span>
       </div>
 
-      <div className="flex pt-5">
+      <div className="flex flex-wrap pt-5 md:flex-nowrap">
         {newDish.slice(0, 4).map((dish) => (
-          <RecipeCard key={dish.id} dish={dish} />
+          <div key={dish.id} className="w-full md:w-1/4 p-2">
+            <RecipeCard dish={dish} />
+          </div>
         ))}
       </div>
     </div>
