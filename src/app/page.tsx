@@ -64,17 +64,19 @@ export default function Page() {
         />
       </div>
 
-      <div className="bg-[#f58661] p-14 justify-center">
-        <div className="flex ">
-          <h1 className="flex justify-end pr-5 pb-10 text-6xl text-primary cormorant-bold w-full md:text-8xl">
-            Explore By
-          </h1>
-          <h1 className="flextext-6xl text-primary bonheur-royale-regular w-full md:text-8xl">
-            Category
-          </h1>
-        </div>
+      <div className="bg-[#f58661] p-14 justify-center h-[80vh]">
+        <div className="pt-20">
+          <div className="flex pb-10">
+            <h1 className="flex justify-end pr-5 pb-10 text-6xl text-primary cormorant-bold w-full md:text-8xl">
+              Explore By
+            </h1>
+            <h1 className="flextext-6xl text-primary bonheur-royale-regular w-full md:text-8xl">
+              Category
+            </h1>
+          </div>
 
-        <ListCategory categories={categories} />
+          <ListCategory categories={categories} />
+        </div>
       </div>
 
       <div>
