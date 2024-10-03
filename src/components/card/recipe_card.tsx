@@ -12,12 +12,12 @@ type dishType = {
 
 export default function RecipeCard({ dish }: { dish: dishType }) {
   return (
-    <div className="card flex justify-center">
+    <div className="card flex justify-center m-3">
       <Link className="flex justify-center" href={`/recipes/${dish.id}`}>
         <div className="relative overflow-hidden w-[250px]">
           <figure className="group flex items-center justify-center">
             <Image
-              className="group-hover:scale-110 transition-transform duration-400"
+              className="group-hover:scale-110 transition-transform duration-700"
               src={dish.image}
               alt={dish.title}
               width={250}
@@ -26,7 +26,7 @@ export default function RecipeCard({ dish }: { dish: dishType }) {
           </figure>
         </div>
       </Link>
-      <div className="card-body">
+      <div className="card-body p-0">
         <div className="flex justify-evenly text-black text-sm ">
           <div className="flex items-center"> Serving: {dish.serving}</div>
           <div className="flex items-center">
