@@ -116,6 +116,9 @@ export default function IngredientSidebar() {
 
       {!showSelected && (
         <div className="overflow-y-auto h-screen">
+          <h2 className="text-lg font-bold text-center mb-2 text-black">
+            Choose Your Ingredients:
+          </h2>
           {mockIngredients.map((ing: any) => (
             <IngredientSelectionForm
               key={Object.keys(ing)[0]}
