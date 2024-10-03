@@ -44,9 +44,6 @@ export default function IngredientSelectionForm({
 
   return (
     <div className="bg-white m-3 p-3 shadow-xl">
-      <h2 className="text-lg font-bold text-center mb-2 text-black">
-        Choose Your Ingredients:
-      </h2>
       {Object.keys(ingredient).map((category) => (
         <div key={category}>
           <h3 className="text-center text-lg font-bold flex justify-between text-black">
