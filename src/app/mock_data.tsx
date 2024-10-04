@@ -209,3 +209,137 @@ export const mockIngredients = [
     ],
   },
 ];
+
+export const MockBlog = [
+  {
+    title: "5 Món Ăn Dễ Nấu Tại Nhà",
+    coverImage: "https://picsum.photos/400/213",
+    date: "2024-10-01",
+    excerpt: "Khám phá 5 món ăn dễ nấu tại nhà cho bữa tối hoàn hảo.",
+    description:
+      "Đây là 5 món ăn dễ nấu tại nhà cho bữa tối hoàn hảo. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Nguyễn Văn A",
+      picture: "https://picsum.photos/400/213",
+    },
+    id: "1",
+  },
+  {
+    title: "Công Thức Nấu Ăn Dành Cho Người Bận Rộn",
+    coverImage: "https://picsum.photos/400/214",
+    date: "2024-10-02",
+    excerpt:
+      "Tìm hiệu công thức nấu ăn nhanh chóng dành cho những người bận rộn.",
+    description:
+      "Đây là công thức nấu ăn nhanh chóng dành cho những người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Trần Thị B",
+      picture: "https://picsum.photos/400/214",
+    },
+    id: "2",
+  },
+  {
+    title: "Mẹo Nấu Ăn Giúp Bạn Tiết Kiệm Thời Gian",
+    coverImage: "https://picsum.photos/400/215",
+    date: "2024-10-03",
+    excerpt: "Các mẹo đơn giản giúp bạn tiết kiệm thoi gian trong bếp.",
+    description:
+      "Đây là các mẹo đơn giản giúp bạn tiết kiệm thoi gian trong bếp. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Lê Văn C",
+      picture: "https://picsum.photos/400/215",
+    },
+    id: "3",
+  },
+  {
+    title: "Tổng Hợp 10 Món Ăn Ngon Nhất Của Tuần",
+    coverImage: "https://picsum.photos/400/216",
+    date: "2024-10-04",
+    excerpt: "Tổng hợp 10 món ăn ngon nhất của tuần cho bữa trưa.",
+    description:
+      "Đây là tổng hợp 10 món ăn ngon nhất của tuần cho bữa trưa. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Nguyễn Văn D",
+      picture: "https://picsum.photos/400/216",
+    },
+    id: "4",
+  },
+  {
+    title: "Cách Nấu Ăn Giảm Cân Hiệu Quả",
+    coverImage: "https://picsum.photos/400/217",
+    date: "2024-10-05",
+    excerpt: "Các cách nấu ăn giảm cân hiệu quả cho người bận rộn.",
+    description:
+      "Đây là các cách nấu ăn giảm cân hiệu quả cho người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Trần Thị E",
+      picture: "https://picsum.photos/400/217",
+    },
+    id: "5",
+  },
+  {
+    title: "Món Ăn Giảm Cân Tốt Nhất Cho Bữa Trưa",
+    coverImage: "https://picsum.photos/400/218",
+    date: "2024-10-06",
+    excerpt: "Món ăn giảm cân tốt nhất cho bữa trưa cho người bận rộn.",
+    description:
+      "Đây là món ăn giảm cân tốt nhất cho bữa trưa cho người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Lê Văn F",
+      picture: "https://picsum.photos/400/218",
+    },
+    id: "6",
+  },
+  {
+    title: "Tổng Hợp 10 Món Ăn Dễ Nấu Nhất",
+    coverImage: "https://picsum.photos/400/219",
+    date: "2024-10-07",
+    excerpt: "Tổng hợp 10 món ăn dễ nấu nhất cho bữa tối.",
+    description:
+      "Đây là tổng hợp 10 món ăn dễ nấu nhất cho bữa tối. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Nguyễn Văn G",
+      picture: "https://picsum.photos/400/219",
+    },
+    id: "7",
+  },
+  {
+    title: "5 Món Ăn Giảm Cân Tốt Nhất Cho Bữa Sáng",
+    coverImage: "https://picsum.photos/400/220",
+    date: "2024-10-08",
+    excerpt: "5 món ăn giảm cân tốt nhất cho bữa sáng cho người bận rộn.",
+    description:
+      "Đây là 5 món ăn giảm cân tốt nhất cho bữa sáng cho người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Trần Thị H",
+      picture: "https://picsum.photos/400/220",
+    },
+    id: "8",
+  },
+  {
+    title: "Món Ăn Giảm Cân Tốt Nhất Cho Bữa Trưa",
+    coverImage: "https://picsum.photos/400/221",
+    date: "2024-10-09",
+    excerpt: "Món ăn giảm cân tốt nhất cho bữa trưa cho người bận rộn.",
+    description:
+      "Đây là món ăn giảm cân tốt nhất cho bữa trưa cho người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Lê Văn I",
+      picture: "https://picsum.photos/400/221",
+    },
+    id: "9",
+  },
+  {
+    title: "Tổng Hợp 10 Món Ăn Giảm Cân Hiệu Quả",
+    coverImage: "https://picsum.photos/400/222",
+    date: "2024-10-10",
+    excerpt: "Tổng hợp 10 món ăn giảm cân hiệu quả cho người bận rộn.",
+    description:
+      "Đây là tổng hợp 10 món ăn giảm cân hiệu quả cho người bận rộn. Bạn có thể dễ dàng nấu các món ăn này chỉ với một số nguyên liệu đơn giản.",
+    author: {
+      name: "Nguyễn Văn J",
+      picture: "https://picsum.photos/400/222",
+    },
+    id: "10",
+  },
+];

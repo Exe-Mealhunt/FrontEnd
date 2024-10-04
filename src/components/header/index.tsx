@@ -42,8 +42,8 @@ export default function Header() {
             <a href="/recipes" className={isActive("/recipes")}>
               Recipes
             </a>
-            <a href="/about" className={isActive("/about")}>
-              About
+            <a href="/blog" className={isActive("/blog")}>
+              Blog
             </a>
             <a href="/cart" className={isActive("/cart")}>
               Cart
@@ -69,8 +69,8 @@ export default function Header() {
         <a href="/recipes" className={isActive("/recipes")}>
           Recipes
         </a>
-        <a href="/about" className={isActive("/about")}>
-          About
+        <a href="/blog" className={isActive("/blog")}>
+          Blog
         </a>
       </div>
       <div className="navbar-end gap-x-8">
