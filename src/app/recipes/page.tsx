@@ -1,23 +1,68 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RecipeCard from "@/components/card/recipe_card";
 
-import ListCategoryBtn from "@/components/button/list_category_btn";
+import ListOccasionBtn from "@/components/button/list_occasion_btn";
 import SearchInput from "@/components/input/search_input";
 import Pagination from "@/components/pagination";
-
-import { newDish, categories } from "../mock_data";
 import SideBar from "@/components/sidebar/ingredient_selection";
+import { getRequest } from "../../../helpers/api-requests";
+import { IngredientsContext } from "@/context/ingredients_context";
+
+import { Occasion } from "../../../constants/types/occasion.type";
+import { Recipe } from "../../../constants/types/recipes.type";
 
 export default function RecipesPage() {
+  const [selectedIngredients] = useContext(IngredientsContext);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [occasion, setOccasion] = useState<Occasion[]>([]);
+  const [selectedOccasion, setSelectedOccasion] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const handleSearch = (searchTerm: string) => {
+    setSearchInput(searchTerm);
+  };
 
   const itemsPerPage = 12;
 
-  const totalPages = Math.ceil(newDish.length / itemsPerPage);
+  const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   const indexOfLastDish = currentPage * itemsPerPage;
   const indexOfFirstDish = indexOfLastDish - itemsPerPage;
+
+  const handleOccasionSelect = (occasionName: string) => {
+    if (selectedOccasion === occasionName) {
+      setSelectedOccasion("");
+    } else {
+      setSelectedOccasion(occasionName);
+    }
+  };
+
+  useEffect(() => {
+    const ingredientNames = selectedIngredients.map(
+      (ingredient: { id: string; name: string; category: string }) =>
+        ingredient.name,
+    );
+
+    getRequest("/recipes", {
+      "search-value": searchInput,
+      "ingredient-names": ingredientNames,
+      "occasion-name": selectedOccasion,
+    })
+      .then((recipes) => {
+        setRecipes(recipes);
+      })
+      .catch(() => {});
+  }, [searchInput, selectedIngredients, selectedOccasion]);
+
+  useEffect(() => {
+    getRequest("/occasions/all", {})
+      .then((occasion) => {
+        setOccasion(occasion);
+      })
+      .catch(() => {});
+  }, []);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -49,24 +94,31 @@ export default function RecipesPage() {
         <div className="col-span-3">
           <div className="flex justify-center mt-10 md:mx-40">
             <div className="w-96">
-              <SearchInput placeholder="Find recipe...." />
+              <SearchInput
+                placeholder="Find recipe..."
+                onSearch={handleSearch}
+              />
             </div>
           </div>
 
           <div className="flex justify-between mx-40 mt-10 md:flex-wrap md:justify-center">
-            {categories.map((category, index) => (
+            {occasion.map((occasion: Occasion, index) => (
               <div key={index} className="mx-3 md:mx-1 md:mb-5">
-                <ListCategoryBtn title={category.name} />
+                <ListOccasionBtn
+                  onClick={() => handleOccasionSelect(occasion.name)}
+                  isSelected={selectedOccasion === occasion.name}
+                  name={occasion.name}
+                />
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2  mb-0 rounded-md">
-            {newDish
+            {recipes
               .slice(indexOfFirstDish, indexOfLastDish)
-              .map((dish, index) => (
+              .map((recipe, index) => (
                 <div key={index}>
-                  <RecipeCard dish={dish} />
+                  <RecipeCard recipe={recipe} />
                 </div>
               ))}
           </div>

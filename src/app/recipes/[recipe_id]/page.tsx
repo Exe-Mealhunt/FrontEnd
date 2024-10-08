@@ -1,13 +1,23 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import logoImg from "../../../assets/login_image.jpg";
 import RecipeCard from "@/components/card/recipe_card";
 
-import { newDish } from "@/app/mock_data";
+import { getRequest } from "../../../../helpers/api-requests";
+import { Recipe } from "../../../../constants/types/recipes.type";
 
 // export default function Detail({ params }: { params: { recipe_id: number } }) {
 export default function Detail() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  useEffect(() => {
+    getRequest("/recipes", {})
+      .then((recipes) => {
+        setRecipes(recipes);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className="bg-primary p-14">
       <div className="grid grid-cols-2 gap-5 md:gap-10 xl:gap-16">
@@ -196,9 +206,9 @@ export default function Detail() {
       </div>
 
       <div className="flex flex-wrap pt-5 md:flex-nowrap">
-        {newDish.slice(0, 4).map((dish) => (
-          <div key={dish.id} className="w-full md:w-1/4 p-2">
-            <RecipeCard dish={dish} />
+        {recipes.slice(0, 4).map((recipe) => (
+          <div key={recipe.id} className="w-full md:w-1/4 p-2">
+            <RecipeCard recipe={recipe} />
           </div>
         ))}
       </div>

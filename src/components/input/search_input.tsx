@@ -1,9 +1,36 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
-export default function SearchInput({ placeholder }: { placeholder: string }) {
+import { useDebounce } from "../../../helpers/debounce";
+
+type SearchInputProps = {
+  placeholder: string;
+  onSearch: (searchTerm: string) => void;
+};
+
+export default function SearchInput({
+  placeholder,
+  onSearch,
+}: SearchInputProps) {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  useEffect(() => {
+    onSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm, onSearch]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
-    <label className="input input-bordered flex items-center gap-2 bg-white rounded-none">
-      <input type="text" className="grow" placeholder={placeholder} />
+    <label className="input input-bordered flex items-center gap-2 text-black bg-white rounded-none">
+      <input
+        type="text"
+        className="grow"
+        onChange={handleInputChange}
+        placeholder={placeholder}
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
