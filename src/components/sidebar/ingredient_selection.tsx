@@ -105,6 +105,24 @@ export default function IngredientSidebar() {
                   <div
                     className="px-4 py-2 hover:bg-gray-10 cursor-pointer text-black"
                     key={ing.id}
+                    onClick={() =>
+                      setSelectedIngredients((prevIng: any) => {
+                        const exists = prevIng.some(
+                          (selected: Category) => selected.id === ing.id,
+                        );
+
+                        return exists
+                          ? prevIng
+                          : [
+                              ...prevIng,
+                              {
+                                id: ing.id,
+                                name: ing.ingredientName,
+                                category: ing.category,
+                              },
+                            ];
+                      })
+                    }
                   >
                     {ing.ingredientName}
                   </div>
