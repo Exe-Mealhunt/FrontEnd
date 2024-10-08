@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { IngredientsProvider } from "@/context/ingredients_context";
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -46,9 +47,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <IngredientsProvider>
+          <Header />
+          {children}
+          <Footer />
+        </IngredientsProvider>
       </body>
     </html>
   );

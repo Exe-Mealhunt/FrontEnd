@@ -1,52 +1,77 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import React, { useState, useEffect, useContext } from "react";
 import { FaTrashCan, FaTrash } from "react-icons/fa6";
 
 import SearchInput from "../input/search_input";
 import IngredientSelectionForm from "../form/ingredient_selection";
+import { getRequest } from "../../../helpers/api-requests";
+import { IngredientsContext } from "@/context/ingredients_context";
 
-import { mockIngredients } from "@/app/mock_data";
+import { Category } from "../../../constants/types/categories.type";
+import { Ingredient } from "../../../constants/types/ingrdients.type";
 
 export default function IngredientSidebar() {
-  const [selectedIng, setSelectedIng] = useState<
-    { id: string; name: string; category: string }[]
-  >([]);
+  const [selectedIngredients, setSelectedIngredients] =
+    useContext(IngredientsContext);
+
+  const [ingredient, setIngredient] = useState<Category[]>([]);
   const [showSelected, setShowSelected] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchIngredient, setSearchIngredient] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const handleSearch = (searchTerm: string) => {
+    setSearchInput(searchTerm);
+    setIsSearching(searchTerm.length > 0);
+  };
 
   useEffect(() => {
-    const savedIng = Cookies.get("selectedIngredients");
-    if (savedIng) {
-      setSelectedIng(JSON.parse(savedIng));
-    }
+    getRequest("/categories/all", {})
+      .then((ingredients) => {
+        setIngredient(ingredients);
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (selectedIng.length > 0) {
-      Cookies.set("selectedIngredients", JSON.stringify(selectedIng), {
-        expires: 7,
-      });
+    if (isSearching) {
+      getRequest("/ingredient/get-ingredients", {
+        value: searchInput,
+      })
+        .then((searchIngredient) => {
+          setSearchIngredient(searchIngredient);
+        })
+        .catch(() => {});
     } else {
-      Cookies.remove("selectedIngredients");
+      setSearchIngredient([]);
     }
-  }, [selectedIng]);
+  }, [searchInput, isSearching]);
 
   const toggleViewSelected = () => setShowSelected(!showSelected);
 
-  const removeIng = (id: string) => {
-    setSelectedIng((prevIng) => prevIng.filter((ing) => ing.id !== id));
+  const removeIng = (name: string) => {
+    setSelectedIngredients((prevIng: Category[]) =>
+      prevIng.filter((ing: Category) => ing.name !== name),
+    );
   };
 
-  const clearAllIng = () => setSelectedIng([]);
+  const clearAllIng = () => setSelectedIngredients([]);
 
-  const groupedIng = selectedIng.reduce(
-    (acc: { [key: string]: { id: string; name: string }[] }, ing) => {
-      acc[ing.category] = acc[ing.category] || [];
-      acc[ing.category].push({ id: ing.id, name: ing.name });
-      return acc;
-    },
-    {},
-  );
+  const groupByCategory = (selectedIngredients: Ingredient[]) => {
+    const groupedIngredients: { [key in string]?: Ingredient[] } = {};
+    selectedIngredients.forEach((current) => {
+      const category = current.category;
+      if (category !== undefined && !groupedIngredients[category]) {
+        groupedIngredients[category] = [];
+      }
+      if (category !== undefined) {
+        groupedIngredients[category]?.push(current);
+      }
+    });
+    return groupedIngredients;
+  };
+
+  const groupedIngredients = groupByCategory(selectedIngredients);
 
   return (
     <div className="bg-[#c7c799]">
@@ -54,7 +79,7 @@ export default function IngredientSidebar() {
         <h1 className="text-black font-bold text-2xl pt-2 pb-1">Pantry</h1>
         <div className="flex items-center">
           <h2 className="py-2 pl-2 text-black">
-            You have {selectedIng.length} Ingredients,
+            You have {selectedIngredients.length} Ingredients,
           </h2>
           <h2
             className="py-2 pr-2 pl-1 cursor-pointer text-black underline"
@@ -64,7 +89,29 @@ export default function IngredientSidebar() {
           </h2>
         </div>
         <div className="w-72 pb-5">
-          <SearchInput placeholder="Find ingredients...." />
+          <SearchInput
+            placeholder="Find ingredients...."
+            onSearch={handleSearch}
+          />
+          {searchIngredient.length > 0 && (
+            <div className="relative">
+              <div
+                className="absolute rounded-md shadow-md hover:bg-gray-10 bg-white p-2 mt-0.5 w-full overflow-y-auto"
+                style={{
+                  maxHeight: searchIngredient.length > 10 ? "250px" : "unset",
+                }}
+              >
+                {searchIngredient.map((ing) => (
+                  <div
+                    className="px-4 py-2 hover:bg-gray-10 cursor-pointer text-black"
+                    key={ing.id}
+                  >
+                    {ing.ingredientName}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -74,7 +121,7 @@ export default function IngredientSidebar() {
             Selected Ingredients:
           </h2>
 
-          {selectedIng.length > 0 && (
+          {selectedIngredients.length > 0 && (
             <div className="flex justify-center mb-2">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded flex items-center"
@@ -86,25 +133,26 @@ export default function IngredientSidebar() {
             </div>
           )}
 
-          {Object.keys(groupedIng).length > 0 ? (
-            Object.keys(groupedIng).map((cate) => (
-              <div className="bg-white m-3 p-3 shadow-xl" key={cate}>
+          {Object.keys(groupedIngredients).length > 0 ? (
+            Object.keys(groupedIngredients).map((category) => (
+              <div className="bg-white m-3 p-3 shadow-xl" key={category}>
                 <h3 className="text-lg font-bold text-black">
-                  {cate.toUpperCase()}
+                  {category.toUpperCase()}
                 </h3>
                 <div>
-                  {groupedIng[cate].map((ing) => (
-                    <div
-                      key={ing.id}
-                      className="flex justify-between text-[#909198] m-2 p-2 border-b border-gray-300"
-                    >
-                      {ing.name}
-                      <FaTrashCan
-                        className="cursor-pointer"
-                        onClick={() => removeIng(ing.id)}
-                      />
-                    </div>
-                  ))}
+                  {groupedIngredients[category] &&
+                    groupedIngredients[category].map((ing) => (
+                      <div
+                        key={ing.id}
+                        className="flex justify-between text-[#909198] m-2 p-2 border-b border-gray-300"
+                      >
+                        {ing.name}
+                        <FaTrashCan
+                          className="cursor-pointer"
+                          onClick={() => removeIng(ing.name)}
+                        />
+                      </div>
+                    ))}
                 </div>
               </div>
             ))
@@ -119,12 +167,12 @@ export default function IngredientSidebar() {
           <h2 className="text-lg font-bold text-center mb-2 text-black">
             Choose Your Ingredients:
           </h2>
-          {mockIngredients.map((ing: any) => (
+          {ingredient.map((ing: Category) => (
             <IngredientSelectionForm
               key={Object.keys(ing)[0]}
               ingredient={ing}
-              selectedIngredients={selectedIng}
-              setSelectedIngredients={setSelectedIng}
+              selectedIngredients={selectedIngredients}
+              setSelectedIngredients={setSelectedIngredients}
             />
           ))}
         </div>

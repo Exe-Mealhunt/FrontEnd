@@ -1,13 +1,35 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-import ListCategory from "@/components/list_category";
+import OccasionList from "@/components/list_occasion";
 import HeroImg from "../assets/meal_hero.jpg";
 import HomeCard from "@/components/card/home_card";
 import RecipeCard from "@/components/card/recipe_card";
+import { getRequest } from "../../helpers/api-requests";
 
-import { newDish, categories } from "./mock_data";
+import { Recipe } from "../../constants/types/recipes.type";
+import { Occasion } from "../../constants/types/occasion.type";
 
 export default function Page() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [occasion, setOccasion] = useState<Occasion[]>([]);
+
+  useEffect(() => {
+    getRequest("/recipes", {})
+      .then((recipes) => {
+        setRecipes(recipes);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    getRequest("/occasions/all", {})
+      .then((occasion) => {
+        setOccasion(occasion);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className="bg-primary">
       <div className="grid grid-cols-2">
@@ -75,7 +97,7 @@ export default function Page() {
             </h1>
           </div>
 
-          <ListCategory categories={categories} />
+          <OccasionList occasions={occasion} />
         </div>
       </div>
 
@@ -87,12 +109,12 @@ export default function Page() {
         </div>
 
         <div className="bg-[#f2fbb0] grid grid-cols-1 md:grid-cols-3 gap-4 m-20 mb-0 rounded-md">
-          {newDish.slice(0, 8).map((dish, index) => (
+          {recipes.slice(0, 8).map((recipe, index) => (
             <div
               key={index}
               className={`relative ${index % 3 === 1 ? "-translate-y-1/4 z-10" : ""}`}
             >
-              <HomeCard dish={dish} />
+              <HomeCard recipe={recipe} />
             </div>
           ))}
 
@@ -114,9 +136,9 @@ export default function Page() {
             lunch
           </h1>
           <div className="grid grid-cols-3 gap-4 m-20 mb-0 rounded-md">
-            {newDish.slice(0, 3).map((dish, index) => (
+            {recipes.slice(0, 3).map((dish, index) => (
               <div key={index}>
-                <RecipeCard dish={dish} />
+                <RecipeCard recipe={dish} />
               </div>
             ))}
           </div>
