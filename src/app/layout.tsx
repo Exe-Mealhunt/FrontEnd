@@ -5,6 +5,7 @@ import { IngredientsProvider } from "@/context/ingredients_context";
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { OccasionProvider } from "../context/occasion_context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -48,9 +49,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <IngredientsProvider>
-          <Header />
-          {children}
-          <Footer />
+          <OccasionProvider>
+            <Header />
+            {children}
+            <Footer />
+          </OccasionProvider>
         </IngredientsProvider>
       </body>
     </html>

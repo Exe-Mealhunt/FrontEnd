@@ -8,12 +8,15 @@ import Pagination from "@/components/pagination";
 import SideBar from "@/components/sidebar/ingredient_selection";
 import { getRequest } from "../../../helpers/api-requests";
 import { IngredientsContext } from "@/context/ingredients_context";
+import { OccasionContext } from "@/context/occasion_context";
 
 import { Occasion } from "../../../constants/types/occasion.type";
 import { Recipe } from "../../../constants/types/recipes.type";
 
 export default function RecipesPage() {
   const [selectedIngredients] = useContext(IngredientsContext);
+  const { chosenOccasion, setChosenOccasion } = useContext(OccasionContext);
+
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [occasion, setOccasion] = useState<Occasion[]>([]);
   const [selectedOccasion, setSelectedOccasion] = useState<string>("");
@@ -34,10 +37,18 @@ export default function RecipesPage() {
   const handleOccasionSelect = (occasionName: string) => {
     if (selectedOccasion === occasionName) {
       setSelectedOccasion("");
+      setChosenOccasion("");
     } else {
+      setChosenOccasion("");
       setSelectedOccasion(occasionName);
     }
   };
+
+  useEffect(() => {
+    if (chosenOccasion) {
+      setSelectedOccasion(chosenOccasion);
+    }
+  }, [chosenOccasion]);
 
   useEffect(() => {
     const ingredientNames = selectedIngredients.map(
@@ -48,13 +59,13 @@ export default function RecipesPage() {
     getRequest("/recipes", {
       "search-value": searchInput,
       "ingredient-names": ingredientNames,
-      "occasion-name": selectedOccasion,
+      "occasion-name": selectedOccasion || chosenOccasion,
     })
       .then((recipes) => {
         setRecipes(recipes);
       })
       .catch(() => {});
-  }, [searchInput, selectedIngredients, selectedOccasion]);
+  }, [searchInput, selectedIngredients, selectedOccasion, chosenOccasion]);
 
   useEffect(() => {
     getRequest("/occasions/all", {})
