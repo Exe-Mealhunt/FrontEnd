@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Recipe } from "../../../constants/types/recipes.type";
 
 export default function HomeCard({ recipe }: { recipe: Recipe }) {
-  console.log(recipe);
   return (
     <div className="card w-96 m-3 relative group rounded-none">
       <Link href={`/recipes/${recipe.id}`}>
