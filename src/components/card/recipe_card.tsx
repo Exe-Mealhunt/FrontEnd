@@ -8,15 +8,17 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
       <Link className="flex justify-center" href={`/recipes/${recipe.id}`}>
         <div className="relative overflow-hidden w-[250px] h-[150px]">
           <figure className="group flex items-center justify-center h-full">
-            <Image
-              className="group-hover:scale-110 transition-transform duration-700 object-cover w-full h-full"
-              src={recipe.imageUrl}
-              alt={recipe.name}
-              width={250}
-              height={250}
-              sizes="100vw"
-              style={{ width: "100%", height: "100%" }}
-            />
+            {recipe.imageUrl && (
+              <Image
+                className="group-hover:scale-110 transition-transform duration-700 object-cover w-full h-full"
+                src={recipe.imageUrl}
+                alt={recipe.name}
+                width={250}
+                height={250}
+                sizes="100vw"
+                style={{ width: "100%", height: "100%" }}
+              />
+            )}
           </figure>
         </div>
       </Link>
