@@ -1,13 +1,16 @@
+import Image from "next/image";
 import React from "react";
 
 export default function CommentCard() {
   return (
     <div className="max-w-screen mx-auto border px-6 py-4 rounded-lg">
       <div className="flex items-center mb-6">
-        <img
+        <Image
           src="https://randomuser.me/api/portraits/men/97.jpg"
           alt="Avatar"
           className="w-12 h-12 rounded-full mr-4"
+          width={48}
+          height={48}
         />
         <div>
           <div className="text-lg font-medium text-gray-800">John Doe</div>

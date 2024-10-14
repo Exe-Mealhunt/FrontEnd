@@ -1,14 +1,46 @@
 "use client";
+import { FormEventHandler, useState } from "react";
 import Image from "next/image";
-import logoImg from "../../assets/login_image.jpg";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+// import { useRouter } from "next/navigation";
+
+import logoImg from "../../assets/login_image.jpg";
 
 export default function Page() {
+  // const { status } = useSession();
+  // const router = useRouter();
+
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+   await signIn("credentials", {
+      email: userInfo.email,
+      password: userInfo.password,
+      redirect: false,
+    });
+  };
+
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.push("/");
+  //   }
+  // }, [status, router]);
+
+  // if (status === "loading") {
+  //   return <p>Loading...</p>;
+  // }
+
   return (
     <div className="h-screen bg-primary relative">
       <Image src={logoImg} alt="login" fill className="object-cover" />
       <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
-        <form className="w-full max-w-md bg-primary p-10">
+        <form
+          className="w-full max-w-md bg-primary p-10"
+          onSubmit={handleSubmit}
+        >
           <h1 className="text-3xl font-medium text-center mb-6 text-black">
             Login
           </h1>
@@ -37,6 +69,10 @@ export default function Page() {
               id="email"
               type="email"
               placeholder="Email"
+              value={userInfo.email}
+              onChange={({ target }) =>
+                setUserInfo({ ...userInfo, email: target.value })
+              }
             />
           </div>
           <div className="mb-6">
@@ -47,6 +83,10 @@ export default function Page() {
               Password
             </label>
             <input
+              value={userInfo.password}
+              onChange={({ target }) =>
+                setUserInfo({ ...userInfo, password: target.value })
+              }
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"

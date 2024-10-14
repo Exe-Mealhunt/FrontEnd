@@ -1,11 +1,14 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+// import { useSession } from "next-auth/react";
 
 import Logo from "../../assets/logo.png";
 
 export default function Header() {
   const path = usePathname();
+
+  // const { data: session } = useSession();
 
   const isActive = (href: string) =>
     path === href
