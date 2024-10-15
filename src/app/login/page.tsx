@@ -10,15 +10,25 @@ export default function Page() {
   const { status } = useSession();
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    await signIn("credentials", {
+    if (!userInfo.email || !userInfo.password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
+    const res = await signIn("credentials", {
       email: userInfo.email,
       password: userInfo.password,
       redirect: false,
     });
+    if (res && res.error) {
+      setError("Invalid email or password. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -39,13 +49,15 @@ export default function Page() {
             Login
           </h1>
 
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
           <div className="flex justify-center mb-6">
-            <span className=" font-medium text-sm text-black">
+            <span className="font-medium text-sm text-black">
               Don&apos;t have an account?
             </span>
             <Link
               href="/register"
-              className=" font-medium text-sm text-blue-500 hover:text-blue-800"
+              className="font-medium text-sm text-blue-500 hover:text-blue-800"
             >
               Sign up
             </Link>
