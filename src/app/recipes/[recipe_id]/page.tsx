@@ -33,7 +33,7 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
   return (
     <div className="bg-primary p-14 overflow-hidden">
       <div className="grid grid-cols-2 gap-5 md:gap-10 xl:gap-16">
-        {recipesDetail && (
+        {recipesDetail?.imageUrl && (
           <Image
             src={recipesDetail.imageUrl}
             alt={recipesDetail.name}
