@@ -1,4 +1,5 @@
 import { Ingredient } from "./ingrdients.type";
+import { Occasion } from "./occasion.type";
 
 export type Recipe = {
   id: number;
@@ -8,6 +9,9 @@ export type Recipe = {
   serving?: number;
   content?: string;
   tutorial?: string;
-  recipeIngredients?: any[];
+  ingredientNames?: Ingredient[];
+  occasion?: Occasion;
+  occasionName: string;
   video?: string;
+  createdAt?: string;
 };

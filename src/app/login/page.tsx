@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
-import logoImg from "../../assets/login_image.jpg";
 import Link from "next/link";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+
+import logoImg from "../../assets/login_image.jpg";
 
 export default function Page() {
   const { status } = useSession();
@@ -42,10 +43,10 @@ export default function Page() {
       <Image src={logoImg} alt="login" fill className="object-cover" />
       <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
         <form
-          className="w-full max-w-md bg-primary p-10"
+          className="w-full max-w-sm md:max-w-md bg-primary p-6 md:p-10 rounded-lg shadow-lg"
           onSubmit={handleSubmit}
         >
-          <h1 className="text-3xl font-medium text-center mb-6 text-black">
+          <h1 className="text-2xl md:text-3xl font-medium text-center mb-6 text-black">
             Login
           </h1>
 
@@ -57,7 +58,7 @@ export default function Page() {
             </span>
             <Link
               href="/register"
-              className="font-medium text-sm text-blue-500 hover:text-blue-800"
+              className="font-medium text-sm text-blue-500 hover:text-blue-800 ml-1"
             >
               Sign up
             </Link>
@@ -107,12 +108,12 @@ export default function Page() {
               Login
             </button>
 
-            <a
+            <Link
               className="inline-block align-baseline font-medium text-sm text-blue-500 hover:text-blue-800"
               href="#"
             >
               Forgot Password
-            </a>
+            </Link>
           </div>
         </form>
       </div>

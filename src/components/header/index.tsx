@@ -3,16 +3,13 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
-
 import Logo from "../../assets/logo.png";
 import { TiArrowSortedDown } from "react-icons/ti";
-
 import { User } from "../../../constants/types/user.type";
 
 export default function Header() {
   const { data: session } = useSession();
   const path = usePathname();
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const isActive = (href: string) =>
@@ -21,7 +18,7 @@ export default function Header() {
       : "font-medium text-black text-lg hover:text-secondary";
 
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+    setDropdownOpen((prev) => !prev);
   };
 
   return (
@@ -62,19 +59,29 @@ export default function Header() {
             </a>
             {session ? (
               <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-ghost m-1">
+                <label
+                  tabIndex={0}
+                  className="btn btn-ghost m-1"
+                  onClick={toggleDropdown}
+                  aria-expanded={dropdownOpen}
+                >
                   <TiArrowSortedDown className="w-5 h-5 text-black" />
                 </label>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu p-2 shadow bg-white rounded-box w-52"
-                >
-                  <li>
-                    <button onClick={() => signOut()} className={isActive("/")}>
-                      Sign Out
-                    </button>
-                  </li>
-                </ul>
+                {dropdownOpen && (
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-white rounded-box w-52"
+                  >
+                    <li>
+                      <button
+                        onClick={() => signOut()}
+                        className="w-full text-left"
+                      >
+                        Sign Out
+                      </button>
+                    </li>
+                  </ul>
+                )}
               </div>
             ) : (
               <a href="/login" className={isActive("/login")}>
@@ -84,12 +91,7 @@ export default function Header() {
           </div>
         </div>
         <a className="normal-case text-xl font-medium text-black" href="/">
-          <Image
-            src={Logo}
-            alt="Picture of the author"
-            width={75}
-            height={75}
-          />
+          <Image src={Logo} alt="Logo" width={75} height={75} />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex gap-x-8">
@@ -112,8 +114,12 @@ export default function Header() {
             <p className="text-black">
               Welcome, {(session.user as User)!.fullName}
             </p>
-            <div className="dropdown dropdown-end" onClick={toggleDropdown}>
-              <label tabIndex={0} className="btn btn-ghost m-0 p-0">
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost m-0 p-0"
+                onClick={toggleDropdown}
+              >
                 <TiArrowSortedDown className="w-5 h-5 text-black" />
               </label>
               {dropdownOpen && (
@@ -123,7 +129,7 @@ export default function Header() {
                 >
                   <li>
                     <button
-                      className="bg-white text-black"
+                      className="bg-white text-black w-full text-left"
                       onClick={() => signOut()}
                     >
                       Sign Out
