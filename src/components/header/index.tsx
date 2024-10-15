@@ -1,16 +1,28 @@
 "use client";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
 
 import Logo from "../../assets/logo.png";
+import { TiArrowSortedDown } from "react-icons/ti";
+
+import { User } from "../../../constants/types/user.type";
 
 export default function Header() {
+  const { data: session } = useSession();
   const path = usePathname();
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const isActive = (href: string) =>
     path === href
       ? "active font-medium text-lg text-secondary"
       : "font-medium text-black text-lg hover:text-secondary";
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
   return (
     <div className="navbar bg-primary px-8">
@@ -48,9 +60,27 @@ export default function Header() {
             <a href="/cart" className={isActive("/cart")}>
               Cart
             </a>
-            <a href="/login" className={isActive("/login")}>
-              Login
-            </a>
+            {session ? (
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost m-1">
+                  <TiArrowSortedDown className="w-5 h-5 text-black" />
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-white rounded-box w-52"
+                >
+                  <li>
+                    <button onClick={() => signOut()} className={isActive("/")}>
+                      Sign Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <a href="/login" className={isActive("/login")}>
+                Login
+              </a>
+            )}
           </div>
         </div>
         <a className="normal-case text-xl font-medium text-black" href="/">
@@ -77,9 +107,37 @@ export default function Header() {
         <a href="/cart" className={isActive("/cart")}>
           Cart
         </a>
-        <a href="/login" className={isActive("/login")}>
-          Login
-        </a>
+        {session ? (
+          <div className="flex items-center gap-x-2">
+            <p className="text-black">
+              Welcome, {(session.user as User)!.fullName}
+            </p>
+            <div className="dropdown dropdown-end" onClick={toggleDropdown}>
+              <label tabIndex={0} className="btn btn-ghost m-0 p-0">
+                <TiArrowSortedDown className="w-5 h-5 text-black" />
+              </label>
+              {dropdownOpen && (
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-white rounded-box w-52"
+                >
+                  <li>
+                    <button
+                      className="bg-white text-black"
+                      onClick={() => signOut()}
+                    >
+                      Sign Out
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          </div>
+        ) : (
+          <a href="/login" className={isActive("/login")}>
+            Login
+          </a>
+        )}
       </div>
     </div>
   );

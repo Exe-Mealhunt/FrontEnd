@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import "./globals.css";
-import { IngredientsProvider } from "@/context/ingredients_context";
 
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import { IngredientsProvider } from "../context/ingredients_context";
 import { OccasionProvider } from "../context/occasion_context";
+import { SessionProvider } from "next-auth/react";
+
+import Header from "../components/header";
+import Footer from "../components/footer";
+import Loading from "./loading";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,31 +34,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap"
-          rel="stylesheet"
-        />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Cormorant:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <IngredientsProvider>
-          <OccasionProvider>
-            <Header />
-            {children}
-            <Footer />
-          </OccasionProvider>
-        </IngredientsProvider>
+        <SessionProvider>
+          <IngredientsProvider>
+            <OccasionProvider>
+              <Header />
+              <Suspense fallback={<Loading />}>{children}</Suspense>
+              <Footer />
+            </OccasionProvider>
+          </IngredientsProvider>
+        </SessionProvider>
       </body>
     </html>
   );
