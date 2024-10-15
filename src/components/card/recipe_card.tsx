@@ -7,7 +7,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     <div className="card flex justify-center m-3">
       <Link className="flex justify-center" href={`/recipes/${recipe.id}`}>
         <div className="relative overflow-hidden w-[250px] h-[150px]">
-          <figure className="group flex items-center justify-center h-full">
+          <figure className="group flex items-center justify-center h-full relative">
             {recipe.imageUrl && (
               <Image
                 className="group-hover:scale-110 transition-transform duration-700 object-cover w-full h-full"
@@ -19,6 +19,10 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
                 style={{ width: "100%", height: "100%" }}
               />
             )}
+
+            <span className="absolute top-3 left-3 text-center text-black bg-[#d7ff49] text-sm px-3 py-1">
+              {recipe.occasionName}
+            </span>
           </figure>
         </div>
       </Link>

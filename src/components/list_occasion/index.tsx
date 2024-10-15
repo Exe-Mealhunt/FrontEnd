@@ -23,13 +23,17 @@ export default function OccasionList({ occasions }: { occasions: Occasion[] }) {
           onClick={() => handleOccasionClick(occasion.name)}
           className={`bg-primary transition-transform duration-500 ease-in-out md:w-1/3 w-full md:mx-4 mx-2 md:mb-0 mb-4`}
           style={{
-            transform: `rotate(${occasions.indexOf(occasion) % 2 === 0 ? "-25deg" : "25deg"})`,
+            transform: `rotate(${window.innerWidth < 768 ? "0deg" : occasions.indexOf(occasion) % 2 === 0 ? "-25deg" : "25deg"})`,
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = `rotate(${occasions.indexOf(occasion) % 2 === 0 ? "0deg" : "0deg"})`;
+            if (window.innerWidth >= 768) {
+              e.currentTarget.style.transform = `rotate(${occasions.indexOf(occasion) % 2 === 0 ? "0deg" : "0deg"})`;
+            }
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = `rotate(${occasions.indexOf(occasion) % 2 === 0 ? "-25deg" : "25deg"})`;
+            if (window.innerWidth >= 768) {
+              e.currentTarget.style.transform = `rotate(${occasions.indexOf(occasion) % 2 === 0 ? "-25deg" : "25deg"})`;
+            }
           }}
         >
           <div className="transition duration-300">
