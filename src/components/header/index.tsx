@@ -57,8 +57,8 @@ export default function Header() {
             <a href="/blog" className={isActive("/blog")}>
               Blog
             </a>
-            <a href="/cart" className={isActive("/cart")}>
-              Cart
+            <a href="/subscriptions" className={isActive("/cart")}>
+              Subscriptions
             </a>
             {session ? (
               <div className="dropdown dropdown-end">
@@ -104,8 +104,8 @@ export default function Header() {
         </a>
       </div>
       <div className="navbar-end gap-x-8">
-        <a href="/cart" className={isActive("/cart")}>
-          Cart
+        <a href="/subscriptions" className={isActive("/cart")}>
+          Subscriptions
         </a>
         {session ? (
           <div className="flex items-center gap-x-2">
