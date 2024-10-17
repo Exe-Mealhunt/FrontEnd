@@ -2,6 +2,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BiCheckCircle, BiPlusCircle } from "react-icons/bi";
+import Cookies from "js-cookie";
 
 import RecipeCard from "@/components/card/recipe_card";
 import { getRequest } from "../../../../helpers/api-requests";
@@ -9,11 +11,18 @@ import { Recipe } from "../../../../constants/types/recipes.type";
 import VideoEmbed from "../../../../helpers/video_embed";
 import formatDate from "../../../../helpers/day-format";
 import { OccasionContext } from "@/context/occasion_context";
+import { IngredientsContext } from "@/context/ingredients_context";
+import Loading from "@/app/loading";
+
+import { Category } from "../../../../constants/types/categories.type";
 
 export default function Detail({ params }: { params: { recipe_id: string } }) {
+  const [selectedIngredients, setSelectedIngredients] =
+    useContext(IngredientsContext);
   const recipeId = parseInt(params.recipe_id, 10);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipesDetail, setRecipesDetail] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
   const { setChosenOccasion } = useContext(OccasionContext);
 
   const handleOccasionClick = (name: string) => {
@@ -21,22 +30,37 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
   };
 
   useEffect(() => {
+    setLoading(true);
     getRequest("/recipes", {})
-      .then((recipes) => {
-        setRecipes(recipes);
+      .then((response) => {
+        setRecipes(response.recipes);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    getRequest(`/recipes/${recipeId}`, {})
+    setLoading(true);
+    const ingredientNames = selectedIngredients.map(
+      (ingredient: { id: string; name: string; category: string }) =>
+        ingredient.name.toLowerCase(),
+    );
+
+    getRequest(`/recipes/${recipeId}`, {
+      ingredientNames: ingredientNames,
+    })
       .then((recipesDetail) => {
         setRecipesDetail(recipesDetail);
       })
-      .catch(() => {});
-  }, [recipeId]);
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [recipeId, selectedIngredients]);
 
-  return (
+  return loading ? (
+    <div className="flex justify-center bg-primary items-center">
+      <Loading />
+    </div>
+  ) : (
     <div className="bg-primary p-6 md:p-14 overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10 xl:gap-16">
         {recipesDetail?.recipe.imageUrl && (
@@ -111,6 +135,47 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
               {recipesDetail?.recipe.ingredients?.map((ing: any) => (
                 <li key={ing.id}>
                   {ing.ingredientName}: {ing.quantity} {ing.unit}
+                </li>
+              ))}
+            </ul>
+
+            <h5 className="cormorant-bold text-4xl py-5 text-black">
+              You already have
+            </h5>
+
+            <ul className="list-disc pl-3 text-black">
+              {selectedIngredients.map((ing: any) => (
+                <div key={ing.id} className="flex items-center">
+                  <BiCheckCircle />
+                  <div className="pl-2">{ing.name}</div>
+                </div>
+              ))}
+            </ul>
+
+            <h5 className="cormorant-bold text-4xl py-5 text-black">Missing</h5>
+            <ul className="list-disc pl-5 text-red-500">
+              {recipesDetail?.missingIngredients?.map((ing: any) => (
+                <li key={ing.id} className="flex items-center">
+                  <div>{ing.ingredientName}</div>
+                  <button
+                    onClick={() => {
+                      setSelectedIngredients((prev: Category[]) => {
+                        const newIngredients = [
+                          ...prev,
+                          { name: ing.ingredientName },
+                        ];
+                        Cookies.set(
+                          "selectedIngredients",
+                          JSON.stringify(newIngredients),
+                          { expires: 7 },
+                        );
+                        return newIngredients;
+                      });
+                    }}
+                    className="ml-2 text-red-500 hover:text-red-700"
+                  >
+                    <BiPlusCircle size={20} />
+                  </button>
                 </li>
               ))}
             </ul>

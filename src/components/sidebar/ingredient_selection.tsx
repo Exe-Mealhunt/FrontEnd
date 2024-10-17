@@ -8,12 +8,10 @@ import { getRequest } from "../../../helpers/api-requests";
 import { IngredientsContext } from "@/context/ingredients_context";
 
 import { Category } from "../../../constants/types/categories.type";
-import { Ingredient } from "../../../constants/types/ingrdients.type";
 
 export default function IngredientSidebar() {
   const [selectedIngredients, setSelectedIngredients] =
     useContext(IngredientsContext);
-
   const [ingredient, setIngredient] = useState<Category[]>([]);
   const [showSelected, setShowSelected] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -57,22 +55,6 @@ export default function IngredientSidebar() {
 
   const clearAllIng = () => setSelectedIngredients([]);
 
-  const groupByCategory = (selectedIngredients: Ingredient[]) => {
-    const groupedIngredients: { [key in string]?: Ingredient[] } = {};
-    selectedIngredients.forEach((current) => {
-      const category = current.category;
-      if (category !== undefined && !groupedIngredients[category]) {
-        groupedIngredients[category] = [];
-      }
-      if (category !== undefined) {
-        groupedIngredients[category]?.push(current);
-      }
-    });
-    return groupedIngredients;
-  };
-
-  const groupedIngredients = groupByCategory(selectedIngredients);
-
   return (
     <div className="bg-[#c7c799]">
       <div className="flex flex-col items-center">
@@ -106,7 +88,7 @@ export default function IngredientSidebar() {
                     className="px-4 py-2 hover:bg-gray-10 cursor-pointer text-black"
                     key={ing.id}
                     onClick={() =>
-                      setSelectedIngredients((prevIng: any) => {
+                      setSelectedIngredients((prevIng: Category[]) => {
                         const exists = prevIng.some(
                           (selected: Category) => selected.id === ing.id,
                         );
@@ -151,32 +133,27 @@ export default function IngredientSidebar() {
             </div>
           )}
 
-          {Object.keys(groupedIngredients).length > 0 ? (
-            Object.keys(groupedIngredients).map((category) => (
-              <div className="bg-white m-3 p-3 shadow-xl" key={category}>
-                <h3 className="text-lg font-bold text-black">
-                  {category.toUpperCase()}
-                </h3>
-                <div>
-                  {groupedIngredients[category] &&
-                    groupedIngredients[category].map((ing) => (
-                      <div
-                        key={ing.id}
-                        className="flex justify-between text-[#909198] m-2 p-2 border-b border-gray-300"
-                      >
-                        {ing.name}
-                        <FaTrashCan
-                          className="cursor-pointer"
-                          onClick={() => removeIng(ing.name)}
-                        />
-                      </div>
-                    ))}
+          {/* Hiển thị danh sách selectedIngredients */}
+          <div className="flex flex-col items-center">
+            {selectedIngredients.length > 0 ? (
+              selectedIngredients.map((ingredient: any) => (
+                <div
+                  key={ingredient.id}
+                  className="bg-white w-64 flex justify-between items-center px-4 py-2 mb-2 rounded-md shadow-sm"
+                >
+                  <span className="text-black">{ingredient.name}</span>
+                  <button
+                    onClick={() => removeIng(ingredient.name)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <FaTrashCan />
+                  </button>
                 </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-black">No ingredients selected.</p>
-          )}
+              ))
+            ) : (
+              <p className="text-black text-center">No ingredients selected.</p>
+            )}
+          </div>
         </div>
       )}
 
@@ -185,14 +162,8 @@ export default function IngredientSidebar() {
           <h2 className="text-lg font-bold text-center mb-2 text-black">
             Choose Your Ingredients:
           </h2>
-          {ingredient.map((ing: Category) => (
-            <IngredientSelectionForm
-              key={Object.keys(ing)[0]}
-              ingredient={ing}
-              selectedIngredients={selectedIngredients}
-              setSelectedIngredients={setSelectedIngredients}
-            />
-          ))}
+
+          <IngredientSelectionForm categories={ingredient} />
         </div>
       )}
     </div>

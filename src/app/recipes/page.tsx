@@ -1,14 +1,15 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import RecipeCard from "@/components/card/recipe_card";
 
+import RecipeCard from "@/components/card/recipe_card";
 import ListOccasionBtn from "@/components/button/list_occasion_btn";
 import SearchInput from "@/components/input/search_input";
 import Pagination from "@/components/pagination";
-import SideBar from "@/components/sidebar/ingredient_selection";
+import IngredientSidebar from "@/components/sidebar/ingredient_selection";
 import { getRequest } from "../../../helpers/api-requests";
 import { IngredientsContext } from "@/context/ingredients_context";
 import { OccasionContext } from "@/context/occasion_context";
+import Loading from "../loading";
 
 import { Occasion } from "../../../constants/types/occasion.type";
 import { Recipe } from "../../../constants/types/recipes.type";
@@ -22,17 +23,12 @@ export default function RecipesPage() {
   const [selectedOccasion, setSelectedOccasion] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [itemsPerPage] = useState<number>(12);
 
   const handleSearch = (searchTerm: string) => {
     setSearchInput(searchTerm);
   };
-
-  const itemsPerPage = 12;
-
-  const totalPages = Math.ceil(recipes.length / itemsPerPage);
-
-  const indexOfLastDish = currentPage * itemsPerPage;
-  const indexOfFirstDish = indexOfLastDish - itemsPerPage;
 
   const handleOccasionSelect = (occasionName: string) => {
     if (selectedOccasion === occasionName) {
@@ -56,15 +52,19 @@ export default function RecipesPage() {
         ingredient.name,
     );
 
+    setLoading(true);
     getRequest("/recipes", {
       "search-value": searchInput,
       "ingredient-names": ingredientNames,
       "occasion-name": selectedOccasion || chosenOccasion,
     })
-      .then((recipes) => {
-        setRecipes(recipes);
+      .then((response) => {
+        setRecipes(response.recipes);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   }, [searchInput, selectedIngredients, selectedOccasion, chosenOccasion]);
 
   useEffect(() => {
@@ -76,8 +76,15 @@ export default function RecipesPage() {
   }, []);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
+
+  const indexOfLastRecipe = currentPage * itemsPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
+  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   return (
     <div className="bg-primary">
@@ -99,7 +106,7 @@ export default function RecipesPage() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4">
         <div className="col-span-1">
-          <SideBar />
+          <IngredientSidebar />
         </div>
 
         <div className="col-span-1 md:col-span-3">
@@ -112,35 +119,41 @@ export default function RecipesPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center mx-4 mt-10 overflow-x-auto">
-            {occasion.map((occasion: Occasion, index) => (
-              <div key={index} className="mx-2 mb-3">
-                <ListOccasionBtn
-                  onClick={() => handleOccasionSelect(occasion.name)}
-                  isSelected={selectedOccasion === occasion.name}
-                  name={occasion.name}
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-wrap justify-center mx-4 mt-10 overflow-x-auto">
+                {occasion.map((occasion: Occasion, index) => (
+                  <div key={index} className="mx-2 mb-3">
+                    <ListOccasionBtn
+                      onClick={() => handleOccasionSelect(occasion.name)}
+                      isSelected={selectedOccasion === occasion.name}
+                      name={occasion.name}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-0 rounded-md">
+                {currentRecipes.map((recipe, index) => (
+                  <div key={index}>
+                    <RecipeCard recipe={recipe} />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-end py-10 md:mr-36">
+                <Pagination
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  totalPages={totalPages}
                 />
               </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-0 rounded-md">
-            {recipes
-              .slice(indexOfFirstDish, indexOfLastDish)
-              .map((recipe, index) => (
-                <div key={index}>
-                  <RecipeCard recipe={recipe} />
-                </div>
-              ))}
-          </div>
-
-          <div className="flex justify-end py-10 md:mr-36">
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              totalPages={totalPages}
-            />
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

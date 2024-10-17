@@ -10,28 +10,39 @@ import { getRequest } from "../../helpers/api-requests";
 
 import { Recipe } from "../../constants/types/recipes.type";
 import { Occasion } from "../../constants/types/occasion.type";
+import Loading from "./loading";
 
 export default function Page() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [occasion, setOccasion] = useState<Occasion[]>([]);
+  const [loadingRecipes, setLoadingRecipes] = useState(true);
+  const [loadingOccasions, setLoadingOccasions] = useState(true);
 
   useEffect(() => {
     getRequest("/recipes", {})
-      .then((recipes) => {
-        setRecipes(recipes);
+      .then((response) => {
+        setRecipes(response.recipes);
+        setLoadingRecipes(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        setLoadingRecipes(false);
+      });
   }, []);
 
   useEffect(() => {
     getRequest("/occasions/all", {})
       .then((occasion) => {
         setOccasion(occasion);
+        setLoadingOccasions(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        setLoadingOccasions(false);
+      });
   }, []);
+
   return (
     <div className="bg-primary">
+      {loadingRecipes && <Loading />}
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="flex items-center justify-center md:justify-end text-center md:text-right h-full">
           <div className="flex flex-col items-center md:items-end justify-center">
@@ -99,7 +110,11 @@ export default function Page() {
               Category
             </h1>
           </div>
-          <OccasionList occasions={occasion} />
+          {loadingOccasions ? (
+            <Loading />
+          ) : (
+            <OccasionList occasions={occasion} />
+          )}
         </div>
       </div>
 
@@ -112,7 +127,9 @@ export default function Page() {
           {recipes.slice(0, 8).map((recipe, index) => (
             <div
               key={index}
-              className={`relative ${index % 3 === 1 ? "-translate-y-1/4 z-10" : ""} transition-transform duration-300`}
+              className={`relative ${
+                index % 3 === 1 ? "-translate-y-1/4 z-10" : ""
+              } transition-transform duration-300`}
             >
               <HomeCard recipe={recipe} />
             </div>

@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-black"></div>
+    <div className="h-screen flex items-center justify-center">
+      <div className="w-12 h-12 rounded-full animate-spin border-t-transparent border-solid border-black border-y-4 shadow-md" />
     </div>
   );
 }
