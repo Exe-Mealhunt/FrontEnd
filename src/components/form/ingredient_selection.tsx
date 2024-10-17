@@ -1,28 +1,43 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
+
+import { IngredientsContext } from "@/context/ingredients_context";
 
 import { Category } from "../../../constants/types/categories.type";
 
 export default function IngredientSelectionForm({
-  ingredient,
-  selectedIngredients,
-  setSelectedIngredients,
+  categories,
 }: {
-  ingredient: { id: number; name: string; ingredientCategories: any[] };
-  selectedIngredients: any[];
-  setSelectedIngredients: React.Dispatch<React.SetStateAction<any[]>>;
+  categories: Category[];
 }) {
+  const [selectedIngredients, setSelectedIngredients] =
+    useContext(IngredientsContext);
+
   const [showMore, setShowMore] = useState<{ [category: string]: boolean }>({});
 
-  const handleSelect = (id: number, name: string, category: string) => {
-    setSelectedIngredients((prevSelected: Category[]) => {
-      const isSelected = prevSelected.some(
-        (item: Category) => item.name === name,
+  const handleSelect = (ingredient: any) => {
+    const cate = categories
+      .filter((category) =>
+        category.ingredientCategories.some(
+          (item: any) => item.ingredient.id === ingredient.id,
+        ),
+      )
+      .map((category) => category.name);
+
+    const newIngredient = {
+      id: ingredient.id,
+      name: ingredient.ingredientName,
+      cate,
+    };
+    setSelectedIngredients((prev: any) => {
+      const isAlreadySelected = prev.some(
+        (item: any) => item.id === newIngredient.id,
       );
-      if (isSelected) {
-        return prevSelected.filter((item: Category) => item.name !== name);
+
+      if (isAlreadySelected) {
+        return prev.filter((item: any) => item.id !== newIngredient.id);
       } else {
-        return [...prevSelected, { id, name, category }];
+        return [...prev, newIngredient];
       }
     });
   };
@@ -36,81 +51,56 @@ export default function IngredientSelectionForm({
 
   return (
     <div className="bg-white m-3 p-3 shadow-xl">
-      <h3 className="text-center text-lg font-bold flex justify-between text-black">
-        {ingredient.name.toUpperCase()}
-        {ingredient.ingredientCategories.length > 10 && (
-          <>
-            {showMore[ingredient.name] ? (
-              <MdKeyboardArrowUp
-                onClick={() => toggleShowMore(ingredient.name)}
-              />
-            ) : (
-              <MdKeyboardArrowDown
-                onClick={() => toggleShowMore(ingredient.name)}
-              />
+      {categories.map((category) => {
+        const ingredientCategories = category.ingredientCategories;
+        const isExpanded = showMore[category.name];
+
+        return (
+          <div key={category.id}>
+            <h3 className="text-center text-lg font-bold flex justify-between text-black p">
+              {category.name}
+            </h3>
+
+            {ingredientCategories
+              .slice(0, isExpanded ? ingredientCategories.length : 10)
+              .map((item: any) => (
+                <button
+                  key={item.ingredient.id}
+                  onClick={() => handleSelect(item.ingredient)}
+                  className={`btn btn-sm m-1 font-medium rounded-none ${
+                    selectedIngredients.some(
+                      (selectedItem: any) =>
+                        selectedItem.id === item.ingredient.id &&
+                        selectedItem.name === item.ingredient.ingredientName,
+                    )
+                      ? "bg-[#93c759] text-white"
+                      : "bg-[#f1f2f4] text-[#909198]"
+                  } hover:bg-[#93c759] hover:text-white`}
+                >
+                  {item.ingredient.ingredientName}
+                </button>
+              ))}
+
+            {ingredientCategories.length > 10 && (
+              <button
+                onClick={() => toggleShowMore(category.name)}
+                className="btn btn-sm m-1 font-medium rounded-none bg-[#f1f2f4] text-[#909198]"
+              >
+                {isExpanded ? (
+                  <>
+                    Show Less <MdKeyboardArrowUp />
+                  </>
+                ) : (
+                  <>
+                    Show More ({ingredientCategories.length - 10} more){" "}
+                    <MdKeyboardArrowDown />
+                  </>
+                )}
+              </button>
             )}
-          </>
-        )}
-      </h3>
-
-      {ingredient.ingredientCategories.slice(0, 10).map((item) => (
-        <button
-          key={item.ingredient.id}
-          className={`btn btn-sm m-1 font-medium rounded-none ${
-            selectedIngredients.some(
-              (selectedItem) =>
-                selectedItem.id === item.ingredient.id &&
-                selectedItem.name === item.ingredient.ingredientName,
-            )
-              ? "bg-[#93c759] text-white"
-              : "bg-[#f1f2f4] text-[#909198]"
-          } hover:bg-[#93c759] hover:text-white`}
-          onClick={() =>
-            handleSelect(
-              item.ingredient.id,
-              item.ingredient.ingredientName,
-              ingredient.name,
-            )
-          }
-        >
-          {item.ingredient.ingredientName}
-        </button>
-      ))}
-
-      {!showMore[ingredient.name] &&
-        ingredient.ingredientCategories.length > 10 && (
-          <button
-            className="btn btn-sm m-1 font-medium rounded-none bg-[#f1f2f4] text-[#909198]"
-            onClick={() => toggleShowMore(ingredient.name)}
-          >
-            ({ingredient.ingredientCategories.length - 10} more)
-          </button>
-        )}
-
-      {showMore[ingredient.name] &&
-        ingredient.ingredientCategories.slice(10).map((item) => (
-          <button
-            key={item.ingredient.id}
-            className={`btn btn-sm m-1 font-medium rounded-none ${
-              selectedIngredients.some(
-                (selectedItem) =>
-                  selectedItem.id === item.ingredient.id &&
-                  selectedItem.name === item.ingredient.ingredientName,
-              )
-                ? "bg-[#93c759] text-white"
-                : "bg-[#f1f2f4] text-[#909198]"
-            } hover:bg-[#93c759] hover:text-white`}
-            onClick={() =>
-              handleSelect(
-                item.ingredient.id,
-                item.ingredient.ingredientName,
-                ingredient.name,
-              )
-            }
-          >
-            {item.ingredient.ingredientName}
-          </button>
-        ))}
+          </div>
+        );
+      })}
     </div>
   );
 }

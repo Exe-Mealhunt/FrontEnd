@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Suspense } from "react";
 import "./globals.css";
 
 import { IngredientsProvider } from "../context/ingredients_context";
@@ -9,7 +8,6 @@ import { SessionProvider } from "next-auth/react";
 
 import Header from "../components/header";
 import Footer from "../components/footer";
-import Loading from "./loading";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,9 +27,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
@@ -41,7 +39,7 @@ export default function RootLayout({
           <IngredientsProvider>
             <OccasionProvider>
               <Header />
-              <Suspense fallback={<Loading />}>{children}</Suspense>
+              {children}
               <Footer />
             </OccasionProvider>
           </IngredientsProvider>

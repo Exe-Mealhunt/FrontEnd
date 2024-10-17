@@ -31,7 +31,7 @@ export default function Page() {
       <Image
         src={logoImg}
         alt="high demand pricing plan background"
-        className="h-screen w-full opacity-70 hidden lg:inline-block"
+        className="h-screen w-full opacity-70 hidden lg:inline-block "
       />
 
       <div className="bg-[#fffad6] font-sans lg:bg-transparent flex flex-col lg:flex-row absolute justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 px-5 xl:px-0 py-8 lg:py-0 w-full gap-6 items-center lg:items-stretch">
