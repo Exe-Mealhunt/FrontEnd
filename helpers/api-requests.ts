@@ -27,17 +27,11 @@ export const getRequest = async (
 
 export const postRequest = async (
   path: string,
-  token: string,
   requestBody: Record<string, unknown>,
 ) => {
   const { data } = await axios.post(
     `${config.BACKEND_API}/api${path}`,
     requestBody,
-    {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    },
   );
   return data;
 };

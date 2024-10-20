@@ -2,8 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BiCheckCircle, BiPlusCircle } from "react-icons/bi";
-import Cookies from "js-cookie";
+import { BiPlusCircle } from "react-icons/bi";
 
 import RecipeCard from "@/components/card/recipe_card";
 import { getRequest } from "../../../../helpers/api-requests";
@@ -14,11 +13,8 @@ import { OccasionContext } from "@/context/occasion_context";
 import { IngredientsContext } from "@/context/ingredients_context";
 import Loading from "@/app/loading";
 
-import { Category } from "../../../../constants/types/categories.type";
-
 export default function Detail({ params }: { params: { recipe_id: string } }) {
-  const [selectedIngredients, setSelectedIngredients] =
-    useContext(IngredientsContext);
+  const [selectedIngredients] = useContext(IngredientsContext);
   const recipeId = parseInt(params.recipe_id, 10);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipesDetail, setRecipesDetail] = useState<any>();
@@ -139,39 +135,13 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
               ))}
             </ul>
 
-            <h5 className="cormorant-bold text-4xl py-5 text-black">
-              You already have
-            </h5>
-
-            <ul className="list-disc pl-3 text-black">
-              {selectedIngredients.map((ing: any) => (
-                <div key={ing.id} className="flex items-center">
-                  <BiCheckCircle />
-                  <div className="pl-2">{ing.name}</div>
-                </div>
-              ))}
-            </ul>
-
             <h5 className="cormorant-bold text-4xl py-5 text-black">Missing</h5>
             <ul className="list-disc pl-5 text-red-500">
               {recipesDetail?.missingIngredients?.map((ing: any) => (
                 <li key={ing.id} className="flex items-center">
                   <div>{ing.ingredientName}</div>
                   <button
-                    onClick={() => {
-                      setSelectedIngredients((prev: Category[]) => {
-                        const newIngredients = [
-                          ...prev,
-                          { name: ing.ingredientName },
-                        ];
-                        Cookies.set(
-                          "selectedIngredients",
-                          JSON.stringify(newIngredients),
-                          { expires: 7 },
-                        );
-                        return newIngredients;
-                      });
-                    }}
+                    onClick={() => {}}
                     className="ml-2 text-red-500 hover:text-red-700"
                   >
                     <BiPlusCircle size={20} />
