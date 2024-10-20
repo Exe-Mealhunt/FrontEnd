@@ -13,8 +13,11 @@ import Loading from "../loading";
 
 import { Occasion } from "../../../constants/types/occasion.type";
 import { Recipe } from "../../../constants/types/recipes.type";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-export default function RecipesPage() {
+export default function Page() {
+  const { data: session } = useSession();
   const [selectedIngredients] = useContext(IngredientsContext);
   const { chosenOccasion, setChosenOccasion } = useContext(OccasionContext);
 
@@ -24,7 +27,8 @@ export default function RecipesPage() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [itemsPerPage] = useState<number>(12);
+  const [itemsPerPage] = useState<number>(20);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const handleSearch = (searchTerm: string) => {
     setSearchInput(searchTerm);
@@ -57,15 +61,24 @@ export default function RecipesPage() {
       "search-value": searchInput,
       "ingredient-names": ingredientNames,
       "occasion-name": selectedOccasion || chosenOccasion,
+      currentPage,
+      "page-size": itemsPerPage,
     })
       .then((response) => {
         setRecipes(response.recipes);
+        setTotalPages(response.totalPages);
       })
       .catch(() => {})
       .finally(() => {
         setLoading(false);
       });
-  }, [searchInput, selectedIngredients, selectedOccasion, chosenOccasion]);
+  }, [
+    searchInput,
+    selectedIngredients,
+    selectedOccasion,
+    chosenOccasion,
+    currentPage,
+  ]);
 
   useEffect(() => {
     getRequest("/occasions/all", {})
@@ -84,7 +97,6 @@ export default function RecipesPage() {
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   return (
     <div className="bg-primary">
@@ -110,13 +122,20 @@ export default function RecipesPage() {
         </div>
 
         <div className="col-span-1 md:col-span-3">
-          <div className="flex justify-center mt-10 md:mx-40">
+          <div className="flex justify-between mt-10 md:mx-40">
             <div className="w-96">
               <SearchInput
                 placeholder="Find recipe..."
                 onSearch={handleSearch}
               />
             </div>
+            {session && (
+              <Link href={"/create_recipe"}>
+                <button className="btn bg-[#46500c] rounded-none border-none hover:bg-secondary text-white">
+                  Create Recipe
+                </button>
+              </Link>
+            )}
           </div>
 
           {loading ? (
