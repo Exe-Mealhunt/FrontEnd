@@ -16,8 +16,9 @@ import { Recipe } from "../../../constants/types/recipes.type";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-export default function Page() {
+export default function RecipesPage() {
   const { data: session } = useSession();
+
   const [selectedIngredients] = useContext(IngredientsContext);
   const { chosenOccasion, setChosenOccasion } = useContext(OccasionContext);
 
@@ -27,8 +28,7 @@ export default function Page() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [itemsPerPage] = useState<number>(20);
-  const [totalPages, setTotalPages] = useState<number>(0);
+  const [itemsPerPage] = useState<number>(12);
 
   const handleSearch = (searchTerm: string) => {
     setSearchInput(searchTerm);
@@ -61,24 +61,16 @@ export default function Page() {
       "search-value": searchInput,
       "ingredient-names": ingredientNames,
       "occasion-name": selectedOccasion || chosenOccasion,
-      currentPage,
-      "page-size": itemsPerPage,
+      "page-size": 100,
     })
       .then((response) => {
         setRecipes(response.recipes);
-        setTotalPages(response.totalPages);
       })
       .catch(() => {})
       .finally(() => {
         setLoading(false);
       });
-  }, [
-    searchInput,
-    selectedIngredients,
-    selectedOccasion,
-    chosenOccasion,
-    currentPage,
-  ]);
+  }, [searchInput, selectedIngredients, selectedOccasion, chosenOccasion]);
 
   useEffect(() => {
     getRequest("/occasions/all", {})
@@ -97,6 +89,7 @@ export default function Page() {
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   return (
     <div className="bg-primary">

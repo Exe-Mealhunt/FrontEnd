@@ -21,7 +21,13 @@ const TextEditor = dynamic(() => import("@/components/input/tutorial_input"), {
 });
 
 export default function CreateRecipePage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status]);
 
   const router = useRouter();
 
@@ -31,7 +37,8 @@ export default function CreateRecipePage() {
   const [content, setContent] = useState("");
   const [occasions, setOccasions] = useState<Occasion[]>([]);
   const [ingredients, setIngredients] = useState<any[]>([]);
-  const [occasionValue, setOccasionValue] = useState<number | null>(null);
+  const [occasionValue, setOccasionValue] = useState<any>();
+
   const [filteredOccasions, setFilteredOccasions] = useState<Occasion[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<
     { ingredientId: number; unit: string | null; quantity: number }[]
@@ -93,7 +100,7 @@ export default function CreateRecipePage() {
       video,
       imageUrl,
       content,
-      occasionId: occasionValue,
+      occasionId: occasionValue.id,
       ingredients: selectedIngredients.map((ingredient) => ({
         ingredientId: ingredient.ingredientId,
         unit: ingredient.unit || null,
@@ -104,7 +111,6 @@ export default function CreateRecipePage() {
 
     try {
       const response = await postRequest("/recipes", recipeData);
-      console.log(response);
       toast.success("Recipe submitted successfully!");
       if (response === "Recipe added successfully.") {
         router.push("/recipes");
@@ -135,10 +141,10 @@ export default function CreateRecipePage() {
       (ingredient) =>
         ingredient.ingredientName === ingredientValue.ingredientName,
     );
-    if (selectedIngredient) {
+    if (selectedIngredient && unitValue) {
       const newIngredient = {
         ingredientId: selectedIngredient.id,
-        unit: unitValue || null,
+        unit: unitValue,
         quantity: ingredientQuantity,
       };
 
@@ -150,7 +156,7 @@ export default function CreateRecipePage() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 sm:p-6 md:p-8 flex items-center justify-center">
+    <div className="bg-gradient-to-r from-amber-500 to-red-500 p-4 sm:p-6 md:p-8 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-4xl">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
           Create Recipe
@@ -164,7 +170,7 @@ export default function CreateRecipePage() {
                   className="block text-gray-700 mb-2"
                   htmlFor="recipeName"
                 >
-                  Recipe Name:
+                  Recipe Name: <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="recipeName"
@@ -180,7 +186,7 @@ export default function CreateRecipePage() {
               {/* Image URL */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="videoUrl">
-                  Image URL:
+                  Image URL: <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="ImageUrl"
@@ -196,7 +202,7 @@ export default function CreateRecipePage() {
               {/* Video URL */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="videoUrl">
-                  Video URL:
+                  Video URL: <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="videoUrl"
@@ -212,14 +218,14 @@ export default function CreateRecipePage() {
               {/* Recipe Content */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="Content">
-                  Recipe Content:
+                  Recipe Desciption: <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="Content"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   className="input w-full text-gray-900 bg-white rounded-md border border-gray-300 p-3 focus:border-indigo-500"
-                  placeholder="Enter recipe Content"
+                  placeholder="Enter recipe desciption"
                   rows={4}
                   required
                 />
@@ -228,7 +234,7 @@ export default function CreateRecipePage() {
               {/* Recipe Tutorial */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="videoUrl">
-                  Tutorial:
+                  Tutorial: <span className="text-red-500">*</span>
                 </label>
                 <TextEditor text={tutorial} setText={setTutorial} />
               </div>
@@ -237,17 +243,15 @@ export default function CreateRecipePage() {
               {/* Select Occasion */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="occasion">
-                  Select Occasion:
+                  Select Occasion: <span className="text-red-500">*</span>
                 </label>
                 <CustomAutoComplete
-                  value={
-                    occasions.find((oc) => oc.id === occasionValue)?.name || ""
-                  }
+                  value={occasionValue}
                   suggestions={filteredOccasions}
                   completeMethod={(e) =>
                     search(e, occasions, setFilteredOccasions)
                   }
-                  onChange={(e) => setOccasionValue(e.value.id)}
+                  onChange={(e) => setOccasionValue(e.value)}
                   field="name"
                   placeholder="Search Occasion"
                 />
@@ -259,7 +263,7 @@ export default function CreateRecipePage() {
                   className="block text-gray-700 mb-2"
                   htmlFor="ingredient"
                 >
-                  Select Ingredient:
+                  Select Ingredient: <span className="text-red-500">*</span>
                 </label>
                 <CustomAutoComplete
                   value={ingredientValue}
@@ -276,7 +280,7 @@ export default function CreateRecipePage() {
               {/* Unit */}
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="unit">
-                  Unit:
+                  Unit: <span className="text-red-500">*</span>
                 </label>
                 <CustomAutoComplete
                   value={unitValue}
