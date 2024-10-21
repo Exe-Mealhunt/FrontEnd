@@ -150,8 +150,8 @@ export default function CreateRecipePage() {
   };
 
   return (
-    <div className="bg-[#ffd54e] h-screen p-4 sm:p-6 md:p-8 flex items-center justify-center">
-      <div className="absolute bg-white rounded-lg shadow-xl p-8 w-full max-w-4xl">
+    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 sm:p-6 md:p-8 flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-4xl">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
           Create Recipe
         </h1>
