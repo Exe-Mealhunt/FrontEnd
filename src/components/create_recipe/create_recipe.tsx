@@ -31,7 +31,7 @@ export default function CreateRecipe() {
   const [occasionValue, setOccasionValue] = useState<Occasion>();
   const [filteredOccasions, setFilteredOccasions] = useState<Occasion[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<
-    { ingredientId: number; unit: string | null; quantity: number }[]
+    { ingredientId: number; unit: string | null; quantity: number | null }[]
   >([]);
   const [ingredientValue, setIngredientValue] = useState<Ingredient>();
   const [ingredientQuantity, setIngredientQuantity] = useState(1);
@@ -138,7 +138,7 @@ export default function CreateRecipe() {
       const newIngredient = {
         ingredientId: selectedIng.id,
         unit: unitValue,
-        quantity: ingredientQuantity,
+        quantity: unitValue === "optional" ? null : ingredientQuantity,
       };
 
       setSelectedIngredients((prev) => [...prev, newIngredient]);
@@ -292,22 +292,28 @@ export default function CreateRecipe() {
               </div>
 
               {/* Quantity */}
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2" htmlFor="quantity">
-                  Quantity:
-                </label>
-                <input
-                  id="quantity"
-                  type="number"
-                  value={ingredientQuantity}
-                  onChange={(e) =>
-                    setIngredientQuantity(Number(e.target.value))
-                  }
-                  className="input w-full text-gray-900 bg-white rounded-md border border-gray-300 p-3 focus:border-indigo-500"
-                  placeholder="Enter quantity"
-                  min={1}
-                />
-              </div>
+              {unitValue !== "optional" && (
+                <div className="mb-4">
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="quantity"
+                  >
+                    Quantity:
+                  </label>
+                  <input
+                    id="quantity"
+                    type="number"
+                    value={ingredientQuantity}
+                    onChange={(e) =>
+                      setIngredientQuantity(Number(e.target.value))
+                    }
+                    className="input w-full text-gray-900 bg-white rounded-md border border-gray-300 p-3 focus:border-indigo-500"
+                    placeholder="Enter quantity"
+                    min={1}
+                    disabled={unitValue === "optional"} // Disable input if unit is "optional"
+                  />
+                </div>
+              )}
 
               {/* Add Ingredient Button */}
               <div className="mt-4">

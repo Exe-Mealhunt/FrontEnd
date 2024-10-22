@@ -149,8 +149,8 @@ export default function CreateIngredient() {
               </h2>
               <ul className="list-disc ml-4 text-gray-600">
                 {selectedCategory.map((item, index) => (
-                  <li key={index} className="flex items-center justify-between">
-                    <span>{item.name}</span>
+                  <li key={index} className="flex">
+                    <span className="text-black">{item.name}</span>
                     <button
                       onClick={() => removeCategory(item.id)}
                       className="text-red-500 ml-2"
