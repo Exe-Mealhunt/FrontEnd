@@ -135,10 +135,9 @@ export default function Page() {
               <HomeCard recipe={recipe} />
             </div>
           ))}
-
           <a
             href="/recipes"
-            className="flex justify-center items-center bg-[#46500c] text-black text-xl font-bold transition-transform duration-300 transform hover:scale-105 cursor-pointer p-4 md:col-span-3 mt-4"
+            className="flex justify-center items-center bg-[#46500c] text-black text-xl font-bold transition-transform duration-300 transform hover:scale-105 cursor-pointer p-4"
           >
             Explore All
           </a>
