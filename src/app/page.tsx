@@ -69,6 +69,7 @@ export default function Page() {
             </h2>
 
             <a
+              className="mr-20"
               href="https://www.facebook.com/profile.php?id=61566404104949&is_tour_dismissed&locale=vi_VN"
               target="_blank"
             >
