@@ -32,29 +32,38 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-
+  
   .bonheur-royale-regular {
     font-family: "Bonheur Royale", cursive;
     font-weight: 400;
+    font-style: normal;
   }
 
   .cormorant-light {
     font-family: "Cormorant", serif;
+    font-optical-sizing: auto;
     font-weight: 300;
+    font-style: normal;
   }
 
   .cormorant-regular {
     font-family: "Cormorant", serif;
+    font-optical-sizing: auto;
     font-weight: 400;
+    font-style: normal;
   }
 
   .cormorant-bold {
     font-family: "Cormorant", serif;
+    font-optical-sizing: auto;
     font-weight: 700;
+    font-style: normal;
   }
 
   .cormorant-black {
     font-family: "Cormorant", serif;
+    font-optical-sizing: auto;
     font-weight: 900;
+    font-style: normal;
   }
 }

@@ -1,11 +1,8 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-
-import logoImg from "../../assets/login_image.jpg";
 
 export default function Page() {
   const { status } = useSession();
@@ -39,40 +36,36 @@ export default function Page() {
   }, [status, router]);
 
   return (
-    <div className="h-screen bg-primary relative">
-      <Image src={logoImg} alt="login" fill className="object-cover" />
-      <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
-        <form
-          className="w-full max-w-sm md:max-w-md bg-primary p-6 md:p-10 rounded-lg shadow-lg"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-2xl md:text-3xl font-medium text-center mb-6 text-black">
-            Login
-          </h1>
+    <div className="bg-[url('https://img.freepik.com/free-photo/ingredients-cabbage-carrot-pie-cabbage-carrots-eggs-flour-milk-butter-spices-white-background_127032-2866.jpg?w=1800&t=st=1729571560~exp=1729572160~hmac=a8446e659c27ecf598ec93ece324c8e78cce3d945f34e195d207b1273e279fbd')] bg-cover bg-no-repeat min-h-screen flex items-center justify-center">
+      <div className="bg-primary bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-semibold text-center text-black mb-6">
+          Login
+        </h1>
 
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-          <div className="flex justify-center mb-6">
-            <span className="font-medium text-sm text-black">
-              Don&apos;t have an account?
-            </span>
-            <Link
-              href="/register"
-              className="font-medium text-sm text-blue-500 hover:text-blue-800 ml-1"
-            >
-              Sign up
-            </Link>
-          </div>
+        <div className="flex justify-center mb-6">
+          <span className="text-sm text-gray-700">
+            Don&apos;t have an account?
+          </span>
+          <Link
+            href="/register"
+            className="text-blue-500 hover:text-blue-700 ml-1 font-medium"
+          >
+            Sign up
+          </Link>
+        </div>
 
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-medium mb-2"
+              className="block text-gray-700 text-sm font-medium mb-1"
               htmlFor="email"
             >
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
               id="email"
               type="email"
               placeholder="Email"
@@ -80,17 +73,18 @@ export default function Page() {
               onChange={({ target }) =>
                 setUserInfo({ ...userInfo, email: target.value })
               }
+              required
             />
           </div>
           <div className="mb-6">
             <label
-              className="block text-gray-700 text-sm font-medium mb-2"
+              className="block text-gray-700 text-sm font-medium mb-1"
               htmlFor="password"
             >
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400"
               id="password"
               type="password"
               placeholder="Password"
@@ -98,21 +92,22 @@ export default function Page() {
               onChange={({ target }) =>
                 setUserInfo({ ...userInfo, password: target.value })
               }
+              required
             />
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-secondary hover:bg-[#4CAF50] text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200"
               type="submit"
             >
               Login
             </button>
 
             <Link
-              className="inline-block align-baseline font-medium text-sm text-blue-500 hover:text-blue-800"
               href="#"
+              className="text-sm text-blue-500 hover:text-blue-700"
             >
-              Forgot Password
+              Forgot Password?
             </Link>
           </div>
         </form>

@@ -1,7 +1,5 @@
 import { FaUtensils, FaPizzaSlice, FaIceCream } from "react-icons/fa";
-import Image from "next/image";
 
-import logoImg from "../../assets/login_image.jpg";
 import { FaHandPointRight } from "react-icons/fa";
 
 const PRICING_DATA = [
@@ -28,16 +26,10 @@ const PRICING_DATA = [
 export default function Page() {
   return (
     <>
-      <Image
-        src={logoImg}
-        alt="high demand pricing plan background"
-        className="h-screen w-full opacity-70 hidden lg:inline-block "
-      />
-
-      <div className="bg-[#fffad6] font-sans lg:bg-transparent flex flex-col lg:flex-row absolute justify-center lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 px-5 xl:px-0 py-8 lg:py-0 w-full gap-6 items-center lg:items-stretch">
+      <div className="bg-[url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?cs=srgb&dl=pexels-ella-olsson-572949-1640774.jpg&fm=jpg')] bg-cover bg-center font-sans flex flex-col lg:flex-row justify-center lg:items-center min-h-screen px-5 xl:px-0 py-8 w-full gap-6 items-center">
         {PRICING_DATA.map((data, index) => (
           <div key={index} className="relative">
-            <div className="max-w-sm xl:w-[384px] p-6 bg-white group h-full rounded-2xl lg:hover:-translate-y-6 ease-in duration-300 hover:bg-[#0B0641] hover:text-white border xl:border-none border-[#0B0641]">
+            <div className="max-w-sm xl:w-[384px] p-6 bg-white group h-full rounded-2xl transition-transform ease-in-out duration-300 hover:-translate-y-3 hover:bg-[#0B0641] hover:text-white border border-[#0B0641] shadow-lg">
               <div className="flex flex-row gap-5 items-center">
                 <div className="text-black group-hover:text-white">
                   {data.iconComponent}

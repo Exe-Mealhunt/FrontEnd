@@ -93,8 +93,8 @@ export default function RecipesPage() {
 
   return (
     <div className="bg-primary">
-      <div className="container mx-auto p-4 md:p-20 bg-white w-full md:w-11/12">
-        <div className="w-full">
+      <div className="p-4 md:p-20 bg-[url('https://img.freepik.com/premium-photo/white-background-with-food-greenery-around-border_1174990-15609.jpg?w=1800')] bg-cover bg-no-repeat w-full">
+        <div className="w-full ">
           <h1 className="text-4xl md:text-8xl text-black text-center font-bold">
             MealHunt&nbsp;
           </h1>

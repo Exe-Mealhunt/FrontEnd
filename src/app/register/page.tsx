@@ -1,13 +1,10 @@
 "use client";
-import Image from "next/image";
-import logoImg from "../../assets/login_image.jpg";
 import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="h-screen bg-primary relative">
-      <Image src={logoImg} alt="register" fill className="object-cover" />
-      <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
+    <div className="bg-[url('https://img.freepik.com/free-photo/ingredients-cabbage-carrot-pie-cabbage-carrots-eggs-flour-milk-butter-spices-white-background_127032-2866.jpg?w=1800&t=st=1729571560~exp=1729572160~hmac=a8446e659c27ecf598ec93ece324c8e78cce3d945f34e195d207b1273e279fbd')] bg-cover bg-no-repeat min-h-screen flex items-center justify-center">
+      <div className="bg-primary p-8 rounded-lg shadow-lg w-full max-w-md">
         <form className="w-full max-w-md bg-primary p-10">
           <h1 className="text-3xl font-medium text-center mb-6 text-black">
             Sign up

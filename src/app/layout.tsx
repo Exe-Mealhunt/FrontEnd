@@ -36,6 +36,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap"
+          rel="stylesheet"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Cormorant:wght@700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -51,15 +66,14 @@ export default function RootLayout({
           </SessionProvider>
         </PrimeReactProvider>
 
-        {/* Thêm ToastContainer ở đây */}
         <ToastContainer
-          position="top-right" // Vị trí hiển thị của toast
-          autoClose={5000} // Thời gian tự động đóng (ms)
-          hideProgressBar={false} // Ẩn thanh tiến trình
-          closeOnClick // Đóng khi nhấp vào
-          pauseOnHover // Tạm dừng khi di chuột
-          draggable // Cho phép kéo toast
-          pauseOnFocusLoss // Tạm dừng khi mất tiêu điểm
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          pauseOnFocusLoss
         />
       </body>
     </html>
