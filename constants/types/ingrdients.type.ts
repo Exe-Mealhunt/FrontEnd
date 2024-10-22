@@ -1,5 +1,5 @@
 export type Ingredient = {
   id: number;
-  name: string;
-  category?: string;
+  ingredientName: string;
+  category?: string[];
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { AutoComplete } from "primereact/autocomplete";
 
 type CustomAutoCompleteProps = {
-  value: string | number;
+  value: any;
   suggestions: any[];
   completeMethod: (event: any) => void;
   onChange: (event: any) => void;
