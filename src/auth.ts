@@ -1,12 +1,20 @@
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { config } from "./config";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { config } from "../config";
 
-import { User } from "./constants/types/user.type";
+import { User } from "../constants/types/user.type";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const {
+  handlers: { GET, POST },
+  signIn,
+  signOut,
+  auth,
+} = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   providers: [
-    Credentials({
+    CredentialsProvider({
       credentials: {
         email: { label: "Email", type: "email", placeholder: "Email" },
         password: {
@@ -16,6 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       async authorize(credentials) {
+        if (credentials === null) return null;
         const resp = await fetch(`${config.BACKEND_API}/api/auth/login`, {
           method: "POST",
           headers: {
