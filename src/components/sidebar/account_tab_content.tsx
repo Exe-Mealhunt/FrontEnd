@@ -1,16 +1,20 @@
 import React from "react";
 
-interface TabContentProps {
+import UserProfile from "../profile/user_profile";
+
+type TabContentProps = {
   activeTab: string;
-}
+};
 
 export default function TabContent({ activeTab }: TabContentProps) {
   const renderContent = () => {
     switch (activeTab) {
       case "Profile":
-        return <div>Profile Content</div>;
-      case "E-Commerce":
-        return <div>E-Commerce Content</div>;
+        return <UserProfile />;
+      case "My shopping list":
+        return (
+          <div className="w-full bg-white text-black">My shopping list</div>
+        );
       case "Inbox":
         return <div>Inbox Content</div>;
       default:
@@ -18,5 +22,5 @@ export default function TabContent({ activeTab }: TabContentProps) {
     }
   };
 
-  return <div className="p-4 w-full">{renderContent()}</div>;
+  return <>{renderContent()}</>;
 }

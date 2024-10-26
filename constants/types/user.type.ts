@@ -3,4 +3,5 @@ export type User = {
   email: string;
   role: string;
   fullName: string;
+  accessToken: string;
 };

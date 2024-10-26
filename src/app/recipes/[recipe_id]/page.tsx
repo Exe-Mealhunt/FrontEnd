@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BiPlusCircle } from "react-icons/bi";
+// import { BiPlusCircle } from "react-icons/bi";
 
 import RecipeCard from "@/components/card/recipe_card";
 import { getRequest } from "../../../../helpers/api-requests";
@@ -39,7 +39,7 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
     setLoading(true);
     const ingredientNames = selectedIngredients.map(
       (ingredient: { id: string; name: string; category: string }) =>
-        ingredient.name.toLowerCase(),
+        ingredient.name,
     );
 
     getRequest(`/recipes/${recipeId}`, {
@@ -140,12 +140,12 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
               {recipesDetail?.missingIngredients?.map((ing: any) => (
                 <li key={ing.id} className="flex items-center">
                   <div>{ing.ingredientName}</div>
-                  <button
+                  {/* <button
                     onClick={() => {}}
                     className="ml-2 text-red-500 hover:text-red-700"
                   >
                     <BiPlusCircle size={20} />
-                  </button>
+                  </button> */}
                 </li>
               ))}
             </ul>
