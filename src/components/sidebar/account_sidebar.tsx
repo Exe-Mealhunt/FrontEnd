@@ -28,7 +28,7 @@ export default function AccountSidebar({
       ),
     },
     {
-      title: "E-Commerce",
+      title: "My shopping list",
       icon: () => (
         <svg
           xmlns="http://www.w3.org/2000/svg"

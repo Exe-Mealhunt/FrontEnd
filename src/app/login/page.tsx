@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FormEventHandler, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const { status } = useSession();
@@ -32,6 +33,7 @@ export default function Page() {
   useEffect(() => {
     if (status === "authenticated") {
       router.push("/");
+      toast.success("Login successfully");
     }
   }, [status, router]);
 

@@ -122,7 +122,7 @@ export default function RecipesPage() {
                 onSearch={handleSearch}
               />
             </div>
-            {session && (
+            {session?.user?.role === "Admin" && (
               <Link href={"/create_recipe"}>
                 <button className="btn bg-[#46500c] rounded-none border-none hover:bg-secondary text-white">
                   Create Recipe
