@@ -1,9 +1,25 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 import { PostPreview } from "@/components/post";
-import { MockBlog } from "../mock_data";
+import { getRequest } from "../../../helpers/api-requests";
 
-export default function Blog() {
+import { Blog } from "../../../constants/types/blog.type";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+
+export default function Page() {
+  const [blogs, setBlog] = useState<Blog[]>([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    getRequest("/blog/all", {})
+      .then((response) => {
+        setBlog(response.posts);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="bg-white">
       <div className="container mx-auto px-5 bg-white">
@@ -16,17 +32,26 @@ export default function Blog() {
             just for food lovers!
           </h4>
         </section>
+        {session && (
+          <div className="flex justify-end mb-8">
+            <Link href={"/create_post"}>
+              <button className="btn bg-[#46500c] rounded-none border-none hover:bg-secondary text-white">
+                Up Post
+              </button>
+            </Link>
+          </div>
+        )}
 
-        <div className="grid grid-cols-1 bg-white md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 pb-32 ">
-          {MockBlog.map((blogs: any) => (
+        <div className="grid grid-cols-1 bg-white md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 pb-32 mt-4">
+          {blogs.map((blog) => (
             <PostPreview
-              key={blogs.slug}
-              title={blogs.title}
-              coverImage={blogs.coverImage}
-              date={blogs.date}
-              author={blogs.author}
-              id={blogs.id}
-              excerpt={blogs.excerpt}
+              key={blog.id}
+              id={blog.id}
+              title={blog.title}
+              imgUrl={blog.imgUrl}
+              createdAt={blog.createdAt}
+              author={blog.author}
+              rating={blog.rating}
             />
           ))}
         </div>

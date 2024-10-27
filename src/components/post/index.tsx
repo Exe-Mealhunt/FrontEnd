@@ -1,40 +1,36 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 
 import Avatar from "../cover_image/avatar";
-import CoverImage from "../cover_image/blog_cover_image";
 import DateFormatter from "../formatter/date-formatter";
-import HeartButton from "../button/heart_button";
+import { RatingComponent } from "../button/heart_button";
 
-export type Author = {
-  name: string;
-  picture: string;
-};
-
-type Props = {
-  title: string;
-  coverImage: string;
-  date: string;
-  excerpt: string;
-  author: Author;
-  id: string;
-};
+import { Blog } from "../../../constants/types/blog.type";
 
 export function PostPreview({
-  title,
-  coverImage,
-  date,
-  excerpt,
-  author,
   id,
-}: Props) {
+  title,
+  imgUrl,
+  createdAt,
+  author,
+  rating,
+}: Blog) {
   return (
     <div>
       <div className="mb-5">
-        <CoverImage id={id} title={title} src={coverImage} />
+        <Link href={`/blog/${id}`} className="hover:underline text-black">
+          <Image
+            src={imgUrl}
+            alt={`Cover Image for ${title}`}
+            className={`shadow-sm w-full`}
+            width={1300}
+            height={630}
+          />
+        </Link>
       </div>
 
-      <HeartButton />
+      <RatingComponent rating={rating} name={`rating-${id}`} />
 
       <h3 className="text-3xl mb-3 leading-snug">
         <Link href={`/blog/${id}`} className="hover:underline text-black">
@@ -42,10 +38,13 @@ export function PostPreview({
         </Link>
       </h3>
       <div className="text-lg text-black mb-4">
-        <DateFormatter dateString={date} />
+        <DateFormatter dateString={createdAt} />
       </div>
-      <p className="text-lg text-black leading-relaxed mb-4">{excerpt}</p>
-      <Avatar name={author.name} picture={author.picture} />
+      {/* <p className="text-lg text-black leading-relaxed mb-4">{excerpt}</p> */}
+      <Avatar
+        name={author?.userName}
+        //  picture={posted_by.picture}
+      />
     </div>
   );
 }

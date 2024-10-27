@@ -12,20 +12,16 @@ const CoverImage = ({ title, src, id }: Props) => {
     <Image
       src={src}
       alt={`Cover Image for ${title}`}
-      className={`shadow-sm w-full ${id ? "hover:shadow-lg transition-shadow duration-200" : ""}`}
+      className={`shadow-sm w-full`}
       width={1300}
       height={630}
     />
   );
   return (
     <div className="sm:mx-0">
-      {id ? (
-        <Link href={`/blog/${id}`} aria-label={title}>
-          {image}
-        </Link>
-      ) : (
-        image
-      )}
+      <Link href={`/blog/${id}`} aria-label={title}>
+        {image}
+      </Link>
     </div>
   );
 };
