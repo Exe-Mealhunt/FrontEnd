@@ -2,7 +2,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// import { BiPlusCircle } from "react-icons/bi";
+import { useSession } from "next-auth/react";
+import { BiPlusCircle } from "react-icons/bi";
 
 import RecipeCard from "@/components/card/recipe_card";
 import { getRequest } from "../../../../helpers/api-requests";
@@ -12,14 +13,25 @@ import formatDate from "../../../../helpers/day-format";
 import { OccasionContext } from "@/context/occasion_context";
 import { IngredientsContext } from "@/context/ingredients_context";
 import Loading from "@/app/loading";
+import ConfirmAddShoppingList from "@/components/modal/confirm_add_shopping_list";
 
 export default function Detail({ params }: { params: { recipe_id: string } }) {
+  const { data: session } = useSession();
+  const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;
+
   const [selectedIngredients] = useContext(IngredientsContext);
   const recipeId = parseInt(params.recipe_id, 10);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipesDetail, setRecipesDetail] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const { setChosenOccasion } = useContext(OccasionContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [ingredientToShopping, setIngredientToShopping] = useState<any>({});
+
+  const handleOpen = (ing: any) => {
+    setIngredientToShopping(ing);
+    setOpenModal(!openModal);
+  };
 
   const handleOccasionClick = (name: string) => {
     setChosenOccasion(name);
@@ -36,6 +48,27 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
   }, []);
 
   useEffect(() => {
+    if (session === undefined) return;
+
+    setLoading(true);
+
+    const ingredientNames = selectedIngredients.map(
+      (ingredient: { id: string; name: string; category: string }) =>
+        ingredient.name,
+    );
+
+    getRequest(`/recipes/${recipeId}`, {
+      ingredientNames: ingredientNames,
+      ...(userId && { userId }),
+    })
+      .then((recipesDetail) => {
+        setRecipesDetail(recipesDetail);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [session, userId, recipeId, selectedIngredients]);
+
+  const refreshRecipeDetails = () => {
     setLoading(true);
     const ingredientNames = selectedIngredients.map(
       (ingredient: { id: string; name: string; category: string }) =>
@@ -44,13 +77,14 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
 
     getRequest(`/recipes/${recipeId}`, {
       ingredientNames: ingredientNames,
+      ...(userId && { userId }),
     })
       .then((recipesDetail) => {
         setRecipesDetail(recipesDetail);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [recipeId, selectedIngredients]);
+  };
 
   return loading ? (
     <div className="flex justify-center bg-primary items-center">
@@ -140,15 +174,26 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
               {recipesDetail?.missingIngredients?.map((ing: any) => (
                 <li key={ing.id} className="flex items-center">
                   <div>{ing.ingredientName}</div>
-                  {/* <button
-                    onClick={() => {}}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                  >
-                    <BiPlusCircle size={20} />
-                  </button> */}
+
+                  {ing.isInShoppingList === false && (
+                    <button
+                      onClick={() => handleOpen(ing)}
+                      className="ml-2 text-red-500 hover:text-red-700"
+                    >
+                      <BiPlusCircle size={20} />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
+            <ConfirmAddShoppingList
+              open={openModal}
+              handleOpen={handleOpen}
+              ingredient={ingredientToShopping}
+              recipeName={recipesDetail?.recipe.name}
+              recipeId={recipesDetail?.recipe.id}
+              refreshRecipeDetails={refreshRecipeDetails}
+            />
           </div>
         </div>
       </div>

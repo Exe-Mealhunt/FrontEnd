@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Recipe } from "../../../constants/types/recipes.type";
 
-// Array of possible cooking times
 const cookingTimes = [25, 30, 35, 40, 45];
 const servings = [4, 5, 6, 7, 8, 9, 10];
 
@@ -20,7 +19,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           <figure className="group flex items-center justify-center h-full relative">
             {recipe.imageUrl && (
               <Image
-                className="group-hover:scale-110 transition-transform duration-700 object-cover w-full h-full"
+                className="group-hover:scale-110 transition-transform duration-500 object-cover w-full h-full"
                 src={recipe.imageUrl}
                 alt={recipe.name}
                 width={250}

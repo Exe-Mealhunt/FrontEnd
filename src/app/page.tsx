@@ -1,22 +1,32 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import OccasionList from "@/components/list_occasion";
 import HeroImg from "../assets/meal_hero.jpg";
+import DessertImg from "../assets/dessert_image.png";
 import HomeCard from "@/components/card/home_card";
-import RecipeCard from "@/components/card/recipe_card";
 import { getRequest } from "../../helpers/api-requests";
+import Loading from "./loading";
+import ListLunch from "@/components/list-recipe/list_lunch";
+import ListDessert from "@/components/list-recipe/list_desserts";
+import { OccasionContext } from "@/context/occasion_context";
 
 import { Recipe } from "../../constants/types/recipes.type";
 import { Occasion } from "../../constants/types/occasion.type";
-import Loading from "./loading";
 
 export default function Page() {
+  const { setChosenOccasion } = useContext(OccasionContext);
+
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [occasion, setOccasion] = useState<Occasion[]>([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
   const [loadingOccasions, setLoadingOccasions] = useState(true);
+
+  const handleOccasionClick = (name: string) => {
+    setChosenOccasion(name);
+  };
 
   useEffect(() => {
     getRequest("/recipes", {})
@@ -144,22 +154,56 @@ export default function Page() {
         </div>
       </div>
 
-      <div>
-        <div className="bg-[#9baad0] p-14 justify-center">
-          <h1 className="flex justify-center text-6xl text-black pb-8 cormorant-bold w-full md:text-8xl">
-            We love our
-          </h1>
-          <h1 className="flex justify-center text-6xl text-black bonheur-royale-regular w-full md:text-8xl">
-            lunch
-          </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 md:mx-20 mb-0 rounded-md">
-            {recipes.slice(0, 3).map((dish, index) => (
-              <div key={index}>
-                <RecipeCard recipe={dish} />
-              </div>
-            ))}
+      <div className="bg-[#9baad0] p-14 justify-center mt-20">
+        <h1 className="flex justify-center text-6xl text-black pb-8 cormorant-bold w-full md:text-8xl">
+          We love our
+        </h1>
+        <h1 className="flex justify-center text-6xl text-black bonheur-royale-regular w-full md:text-8xl">
+          lunch
+        </h1>
+        <ListLunch />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[.75fr_1fr] gap-4 bg-primary p-5 md:p-10">
+        <div className="bg-[#e3bb21] p-5">
+          <div className="flex flex-col">
+            <div className="flex flex-wrap">
+              <h1 className="text-xl text-white pr-3 cormorant-bold md:text-6xl">
+                Our Best
+              </h1>
+
+              <h1 className="text-xl text-white bonheur-royale-regular md:text-6xl">
+                Desserts
+              </h1>
+            </div>
+            <h1 className="text-xl text-white cormorant-bold md:text-6xl ml-2">
+              Recipes
+            </h1>
+
+            <div className="mt-5">
+              <Link
+                href={"/recipes"}
+                onClick={() => handleOccasionClick("Dessert")}
+              >
+                <button className="btn bg-[#46500c] text-primary rounded-none border-none hover:bg-primary hover:text-[#46500c] cormorant-bold text-xl">
+                  Explore all
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-5">
+            <Image
+              src={DessertImg}
+              alt="Dessert Image"
+              width={300}
+              height={200}
+              className="hidden md:block"
+            />
           </div>
         </div>
+
+        <ListDessert />
       </div>
     </div>
   );
