@@ -1,4 +1,5 @@
 import { Author } from "./author.type";
+import { Comment } from "./comment.type";
 
 export type Blog = {
   id?: number;

@@ -8,23 +8,60 @@ import DateFormatter from "@/components/formatter/date-formatter";
 import CommentCard from "@/components/card/comment";
 
 import { Blog } from "../../../../constants/types/blog.type";
-import { getRequest } from "../../../../helpers/api-requests";
+import { getRequest, postRequest } from "../../../../helpers/api-requests";
+import { Comment } from "../../../../constants/types/comment.type";
+import { useSession } from "next-auth/react";
+import CommentBar from "@/components/input/comment_input";
 
 export default function BlogDetail({
   params,
 }: {
   params: { blog_id: string };
 }) {
+  const { data: session } = useSession();
   const blogId = parseInt(params.blog_id, 10);
   const [blog, setBlog] = useState<Blog>();
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     getRequest(`/blog/${blogId}`, {})
       .then((response) => {
         setBlog(response);
+        setComments(response.comments);
       })
       .catch(() => {});
   }, []);
+
+  const groupCommentsByReplyToId = (
+    comments: Comment[],
+  ): Record<number, Comment[]> => {
+    const map: Record<number, Comment[]> = {};
+    comments.forEach((comment) => {
+      const parentId = comment.replyToId || 0;
+      if (!map[parentId]) {
+        map[parentId] = [];
+      }
+      map[parentId].push(comment);
+    });
+    return map;
+  };
+
+  const commentsGroupedByReplyToId = groupCommentsByReplyToId(comments);
+
+  // Handler to post a new comment on the blog
+  const handleNewComment = async (content: string) => {
+    try {
+      const newComment = await postRequest("/comments", {
+        userId: session?.user.id,
+        postId: blogId,
+        replyToId: null, // null indicates a top-level comment
+        content,
+      });
+      setComments((prevComments) => [...prevComments, newComment]);
+    } catch (error) {
+      console.error("Error posting new comment:", error);
+    }
+  };
 
   return (
     <div className="bg-white px-5">
@@ -40,17 +77,14 @@ export default function BlogDetail({
           {blog?.title}
         </h1>
         <div className="hidden md:block md:mb-12">
-          <Avatar
-            name={blog?.author.userName}
-            // picture={MockBlog[0].author.picture}
-          />
+          <Avatar name={blog?.author.userName} />
         </div>
         <div className="mb-8 md:mb-16 sm:mx-0">
           {blog?.imgUrl && (
             <Image
               src={blog.imgUrl}
               alt={`Cover Image for ${blog?.title}`}
-              className={`shadow-sm w-full`}
+              className="shadow-sm w-full"
               width={1300}
               height={630}
             />
@@ -58,10 +92,7 @@ export default function BlogDetail({
         </div>
         <div className="max-w-2xl mx-auto">
           <div className="block md:hidden mb-6">
-            <Avatar
-              name={blog?.author.userName}
-              // picture={MockBlog[0].author.picture}
-            />
+            <Avatar name={blog?.author.userName} />
           </div>
           <div className="pb-6 text-lg">
             {blog?.createdAt && <DateFormatter dateString={blog.createdAt} />}
@@ -76,21 +107,23 @@ export default function BlogDetail({
 
         <hr className="border-gray-300 my-8" />
 
-        <h1 className="text-black text-4xl font-bold ">Comment</h1>
+        <h1 className="text-black text-4xl font-bold ">Comments</h1>
 
-        <div className="py-4">
-          {blog?.comments?.map((comment: any) => (
-            <CommentCard
-              key={comment.id}
-              id={comment.id}
-              userId={comment.userId}
-              replyToId={comment.replyToId}
-              postId={comment.postId}
-              content={comment.content}
-              rating={comment.rating}
-              createdAt={comment.createdAt}
-            />
-          ))}
+        {/* Comment Bar for adding a new comment on the blog */}
+        <CommentBar onCommentSubmit={handleNewComment} />
+
+        <div className="bg-white px-5">
+          {/* Render top-level comments */}
+          <div className="py-4">
+            {commentsGroupedByReplyToId[0]?.map((comment) => (
+              <CommentCard
+                key={comment.id}
+                comment={comment}
+                replies={commentsGroupedByReplyToId[comment.id!] || []}
+                postId={blogId}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
