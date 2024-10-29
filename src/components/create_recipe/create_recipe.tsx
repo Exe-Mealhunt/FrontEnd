@@ -97,9 +97,9 @@ export default function CreateRecipe() {
     try {
       const response = await postRequest("/recipes", recipeData);
       if (response.name) {
+        router.push("/recipes");
         toast.success("Recipe submitted successfully!");
       }
-      router.push("/recipes");
     } catch (error) {
       alert("An error occurred while submitting the recipe. Please try again.");
       console.error(error);
