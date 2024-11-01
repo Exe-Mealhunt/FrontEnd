@@ -1,9 +1,8 @@
 import React from "react";
 
 export const RatingComponent = ({ rating, name }: any) => {
-  // Round the rating to the nearest half
   const roundedRating = Math.round(rating * 2) / 2;
-  console.log(roundedRating);
+
   return (
     <div className="rating rating-sm rating-half">
       {[...Array(5)].map((_, index) => {
