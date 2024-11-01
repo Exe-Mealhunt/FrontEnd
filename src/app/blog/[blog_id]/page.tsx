@@ -2,16 +2,18 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 import Avatar from "@/components/cover_image/avatar";
 import DateFormatter from "@/components/formatter/date-formatter";
 import CommentCard from "@/components/card/comment";
+import { getRequest, postRequest } from "../../../../helpers/api-requests";
+import CommentBar from "@/components/input/comment_input";
+import Loading from "@/app/loading";
 
 import { Blog } from "../../../../constants/types/blog.type";
-import { getRequest, postRequest } from "../../../../helpers/api-requests";
 import { Comment } from "../../../../constants/types/comment.type";
-import { useSession } from "next-auth/react";
-import CommentBar from "@/components/input/comment_input";
 
 export default function BlogDetail({
   params,
@@ -20,16 +22,22 @@ export default function BlogDetail({
 }) {
   const { data: session } = useSession();
   const blogId = parseInt(params.blog_id, 10);
+
   const [blog, setBlog] = useState<Blog>();
+  const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
+    setLoading(true);
     getRequest(`/blog/${blogId}`, {})
       .then((response) => {
         setBlog(response);
         setComments(response.comments);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const groupCommentsByReplyToId = (
@@ -48,16 +56,23 @@ export default function BlogDetail({
 
   const commentsGroupedByReplyToId = groupCommentsByReplyToId(comments);
 
-  // Handler to post a new comment on the blog
   const handleNewComment = async (content: string) => {
+    if (!session) {
+      toast.error("You need to login to comment");
+      return;
+    }
+
     try {
       const newComment = await postRequest("/comments", {
         userId: session?.user.id,
         postId: blogId,
-        replyToId: null, // null indicates a top-level comment
+        replyToId: null,
         content,
       });
-      setComments((prevComments) => [...prevComments, newComment]);
+      if (newComment.content) {
+        setComments((prevComments) => [...prevComments, newComment]);
+        toast.success("Comment successfully");
+      }
     } catch (error) {
       console.error("Error posting new comment:", error);
     }
@@ -73,47 +88,56 @@ export default function BlogDetail({
           .
         </h2>
 
-        <h1 className="text-5xl text-black md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none pb-12 text-center md:text-left">
-          {blog?.title}
-        </h1>
-        <div className="hidden md:block md:mb-12">
-          <Avatar name={blog?.author.userName} />
-        </div>
-        <div className="mb-8 md:mb-16 sm:mx-0">
-          {blog?.imgUrl && (
-            <Image
-              src={blog.imgUrl}
-              alt={`Cover Image for ${blog?.title}`}
-              className="shadow-sm w-full"
-              width={1300}
-              height={630}
-            />
-          )}
-        </div>
-        <div className="max-w-2xl mx-auto">
-          <div className="block md:hidden mb-6">
-            <Avatar name={blog?.author.userName} />
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <Loading />
           </div>
-          <div className="pb-6 text-lg">
-            {blog?.createdAt && <DateFormatter dateString={blog.createdAt} />}
-          </div>
-          <div
-            className="pb-6 text-lg text-black"
-            dangerouslySetInnerHTML={{
-              __html: blog?.content ?? "",
-            }}
-          />
-        </div>
+        ) : (
+          <>
+            {" "}
+            <h1 className="text-5xl text-black md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none pb-12 text-center md:text-left">
+              {blog?.title}
+            </h1>
+            <div className="hidden md:block md:mb-12">
+              <Avatar name={blog?.author.userName} />
+            </div>
+            <div className="mb-8 md:mb-16 sm:mx-0">
+              {blog?.imgUrl && (
+                <Image
+                  src={blog.imgUrl}
+                  alt={`Cover Image for ${blog?.title}`}
+                  className="shadow-sm w-full"
+                  width={1300}
+                  height={630}
+                />
+              )}
+            </div>
+            <div className="max-w-2xl mx-auto">
+              <div className="block md:hidden mb-6">
+                <Avatar name={blog?.author.userName} />
+              </div>
+              <div className="pb-6 text-lg">
+                {blog?.createdAt && (
+                  <DateFormatter dateString={blog.createdAt} />
+                )}
+              </div>
+              <div
+                className="pb-6 text-lg text-black"
+                dangerouslySetInnerHTML={{
+                  __html: blog?.content ?? "",
+                }}
+              />
+            </div>
+          </>
+        )}
 
         <hr className="border-gray-300 my-8" />
 
         <h1 className="text-black text-4xl font-bold ">Comments</h1>
 
-        {/* Comment Bar for adding a new comment on the blog */}
         <CommentBar onCommentSubmit={handleNewComment} />
 
         <div className="bg-white px-5">
-          {/* Render top-level comments */}
           <div className="py-4">
             {commentsGroupedByReplyToId[0]?.map((comment) => (
               <CommentCard

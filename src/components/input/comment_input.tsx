@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 type CommentBarProps = {
   onCommentSubmit: (content: string) => void;
@@ -9,7 +10,10 @@ const CommentBar: React.FC<CommentBarProps> = ({ onCommentSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (content.trim()) {
+    if (!content.trim()) {
+      toast.error("Reply content cannot be empty.");
+      return;
+    } else {
       onCommentSubmit(content);
       setContent("");
     }

@@ -8,7 +8,7 @@ import { postRequest } from "../../../helpers/api-requests";
 type CommentCardProps = {
   comment: Comment;
   replies: Comment[];
-  postId: number; // Include this if you need post ID for reply posting
+  postId: number;
 };
 
 export default function CommentCard({
@@ -27,8 +27,13 @@ export default function CommentCard({
       return;
     }
 
+    if (!session) {
+      toast.error("You need to login to reply this comment");
+      return;
+    }
+
     const newReply = {
-      userId: session?.user.id, // Replace with actual user ID
+      userId: session?.user.id,
       postId,
       replyToId: comment.id,
       content: replyContent,
@@ -36,8 +41,11 @@ export default function CommentCard({
 
     try {
       const response = await postRequest("/comments", newReply);
-      setReplyList([...replyList, response]); // Add the new reply to state
-      setReplyContent(""); // Clear the input field
+      if (response.content) {
+        toast.success("Successfully reply this comment");
+        setReplyList([...replyList, response]);
+        setReplyContent("");
+      }
     } catch (error) {
       console.error("Error posting reply:", error);
       toast.error("Failed to post reply.");
@@ -46,7 +54,6 @@ export default function CommentCard({
 
   return (
     <div className="max-w-screen mx-auto border px-6 py-4 rounded-lg mb-4">
-      {/* Comment Content */}
       <div className="flex items-center mb-4">
         <img
           src="https://randomuser.me/api/portraits/men/97.jpg"
