@@ -1,23 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
-import { PostPreview } from "@/components/post";
-import { getRequest } from "../../../helpers/api-requests";
-
-import { Blog } from "../../../constants/types/blog.type";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
+import { PostPreview } from "@/components/post";
+import { getRequest } from "../../../helpers/api-requests";
+import Loading from "../loading";
+
+import { Blog } from "../../../constants/types/blog.type";
+
 export default function Page() {
-  const [blogs, setBlog] = useState<Blog[]>([]);
   const { data: session } = useSession();
 
+  const [blogs, setBlog] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     getRequest("/blog/all", {})
       .then((response) => {
         setBlog(response.posts);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -42,19 +49,25 @@ export default function Page() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 bg-white md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 pb-32 mt-4">
-          {blogs.map((blog) => (
-            <PostPreview
-              key={blog.id}
-              id={blog.id}
-              title={blog.title}
-              imgUrl={blog.imgUrl}
-              createdAt={blog.createdAt}
-              author={blog.author}
-              rating={blog.rating}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <Loading />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 bg-white md:grid-cols-2 md:gap-x-16 lg:gap-x-32 gap-y-20 md:gap-y-32 pb-32 mt-4">
+            {blogs.map((blog) => (
+              <PostPreview
+                key={blog.id}
+                id={blog.id}
+                title={blog.title}
+                imgUrl={blog.imgUrl}
+                createdAt={blog.createdAt}
+                author={blog.author}
+                rating={blog.rating}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

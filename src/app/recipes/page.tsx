@@ -27,7 +27,7 @@ export default function RecipesPage() {
   const [selectedOccasion, setSelectedOccasion] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [itemsPerPage] = useState<number>(12);
 
   const handleSearch = (searchTerm: string) => {

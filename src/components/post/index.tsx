@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import Avatar from "../cover_image/avatar";
 import DateFormatter from "../formatter/date-formatter";
-import { RatingComponent } from "../button/heart_button";
+import { RatingComponent } from "../button/rating_button";
 
 import { Blog } from "../../../constants/types/blog.type";
 

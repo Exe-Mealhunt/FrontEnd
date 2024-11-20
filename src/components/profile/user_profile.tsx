@@ -35,17 +35,17 @@ export default function UserProfile() {
           User Profile
         </h1>
         <div className="">
-          <div className="border border-gray-300 rounded-lg p-4 bg-gray-100 text-gray-700">
+          <div className="p-4 text-gray-700">
             <span className="font-medium text-gray-600">Full Name:</span>{" "}
             {user?.fullName}
           </div>
 
-          <div className="border border-gray-300 rounded-lg p-4 bg-gray-100 text-gray-700">
+          <div className="p-4 text-gray-700">
             <span className="font-medium text-gray-600">Email:</span>{" "}
             {user?.email}
           </div>
 
-          <div className="border border-gray-300 rounded-lg p-4 bg-gray-100 text-gray-700">
+          <div className="p-4 text-gray-700">
             <span className="font-medium text-gray-600">Role:</span>{" "}
             {user?.role}
           </div>

@@ -3,7 +3,15 @@ import Link from "next/link";
 
 import { Recipe } from "../../../constants/types/recipes.type";
 
+const cookingTimes = [25, 30, 35, 40, 45];
+const servings = [4, 5, 6, 7, 8, 9, 10];
+
 export default function HomeCard({ recipe }: { recipe: Recipe }) {
+  const randomCookingTime =
+    cookingTimes[Math.floor(Math.random() * cookingTimes.length)];
+  const cookingTime = recipe.cookingTime || `${randomCookingTime} min`;
+  const randomserving = servings[Math.floor(Math.random() * servings.length)];
+  const serving = recipe.serving || `${randomserving}`;
   return (
     <div className="card w-96 m-3 relative group rounded-none">
       <Link href={`/recipes/${recipe.id}`}>
@@ -27,16 +35,14 @@ export default function HomeCard({ recipe }: { recipe: Recipe }) {
       </Link>
       <div className="card-body p-5">
         <div className="flex justify-evenly text-[#46500c] text-sm ">
-          <div className="flex items-center"> Serving: {recipe.serving}</div>
+          <div className="flex items-center"> Serving: {serving}</div>
           <div className="flex items-center">
             <span className="mx-2">|</span>
           </div>
-          <div className="flex items-center">
-            Cooking time: {recipe.cookingTime}
-          </div>
+          <div className="flex items-center">Cooking time: {cookingTime}</div>
         </div>
 
-        <h2 className="card-title flex justify-center text-black font-cormorant text-center">
+        <h2 className="card-title flex justify-center text-black text-2xl font-cormorant text-center">
           {recipe.name}
         </h2>
       </div>

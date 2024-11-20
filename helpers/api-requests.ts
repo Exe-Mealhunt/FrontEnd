@@ -27,11 +27,30 @@ export const getRequest = async (
 
 export const postRequest = async (
   path: string,
-  requestBody: Record<string, unknown>,
+  requestBody?: Record<string, unknown>,
+  query?: Record<string, unknown>,
 ) => {
   const { data } = await axios.post(
     `${config.BACKEND_API}/api${path}`,
     requestBody,
+    { params: query },
+  );
+  return data;
+};
+
+export const postPaymemtRequest = async (
+  path: string,
+  requestBody?: Record<string, unknown>,
+  token?: string,
+) => {
+  const { data } = await axios.post(
+    `${config.BACKEND_API}/api${path}`,
+    requestBody,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
   );
   return data;
 };
