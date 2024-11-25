@@ -21,6 +21,11 @@ export default function ShoppingList() {
     }
   }, [session]);
 
+  const handleDelete = (id: number) => {
+    // Update the list after deletion
+    setShoppingList((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
     <div className="bg-gray-50 w-full min-h-screen flex justify-center">
       {loading ? (
@@ -33,8 +38,11 @@ export default function ShoppingList() {
             My Shopping List
           </h1>
           <div className="grid grid-cols-4 gap-4">
-            {shoppingList.map((recipe, index) => (
-              <ShoppingListCard key={index} recipe={recipe} />
+            {shoppingList.map((recipe) => (
+              <ShoppingListCard
+                key={recipe.id}
+                recipe={{ ...recipe, onDelete: handleDelete }}
+              />
             ))}
           </div>
         </form>

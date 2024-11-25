@@ -14,9 +14,12 @@ export default function TabContent({ activeTab }: TabContentProps) {
         return <UserProfile />;
       case "My shopping list":
         return <ShoppingList />;
-
       default:
-        return <div>Profile Content</div>;
+        return (
+          <div className="flex justify-center items-center text-gray-500 h-screen">
+            <p>No content available for this tab.</p>
+          </div>
+        );
     }
   };
 
