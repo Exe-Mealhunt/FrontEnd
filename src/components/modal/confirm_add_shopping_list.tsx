@@ -52,8 +52,8 @@ export default function ConfirmAddShoppingList({
       <div className="modal-box rounded-none bg-white">
         <h3 className="font-bold text-lg text-black">Add to shopping list!</h3>
         <p className="py-4 text-black">
-          Would you like to add the ingredient &apos;{ingredient.ingredientName}&apos;
-          from the &apos;{recipeName}&apos; to your shopping list?
+          Would you like to add the ingredient &apos;{ingredient.ingredientName}
+          &apos; from the &apos;{recipeName}&apos; to your shopping list?
         </p>
         <div className="modal-action">
           <button
