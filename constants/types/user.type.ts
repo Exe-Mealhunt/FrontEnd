@@ -3,5 +3,10 @@ export type User = {
   email: string;
   role: string;
   fullName: string;
+  subscription: {
+    subscriptionPlanId: number;
+    endDate: string;
+    isCurrent: boolean;
+  } | null;
   accessToken: string;
 };

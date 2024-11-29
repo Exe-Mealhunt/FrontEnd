@@ -14,6 +14,7 @@ import Loading from "@/app/loading";
 
 import { Blog } from "../../../../constants/types/blog.type";
 import { Comment } from "../../../../constants/types/comment.type";
+import { useRouter } from "next/navigation";
 
 export default function BlogDetail({
   params,
@@ -21,6 +22,7 @@ export default function BlogDetail({
   params: { blog_id: string };
 }) {
   const { data: session } = useSession();
+  const router = useRouter();
   const blogId = parseInt(params.blog_id, 10);
 
   const [blog, setBlog] = useState<Blog>();
@@ -38,6 +40,12 @@ export default function BlogDetail({
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    if (session?.user?.subscription == null) {
+      router.push("/login");
+    }
   }, []);
 
   const groupCommentsByReplyToId = (

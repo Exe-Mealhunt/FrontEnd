@@ -8,9 +8,11 @@ import { getRequest } from "../../../helpers/api-requests";
 import Loading from "../loading";
 
 import { Blog } from "../../../constants/types/blog.type";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [blogs, setBlog] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,12 @@ export default function Page() {
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    if (session?.user?.subscription == null) {
+      router.push("/login");
+    }
   }, []);
 
   return (
