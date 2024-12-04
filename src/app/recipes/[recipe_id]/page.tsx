@@ -145,14 +145,18 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
             }}
           />
 
-          <h5 className="cormorant-bold text-4xl py-5 text-black">
-            Watch Video
-          </h5>
-          <div className="flex justify-center">
-            {recipesDetail?.recipe.video && (
-              <VideoEmbed url={recipesDetail.recipe.video} />
-            )}
-          </div>
+          {session?.user?.subscription != null && (
+            <h5 className="cormorant-bold text-4xl py-5 text-black">
+              Watch Video
+            </h5>
+          )}
+          {session?.user?.subscription != null && (
+            <div className="flex justify-center">
+              {recipesDetail?.recipe.video && (
+                <VideoEmbed url={recipesDetail.recipe.video} />
+              )}
+            </div>
+          )}
         </div>
 
         <div className="bg-primary ">
@@ -169,31 +173,39 @@ export default function Detail({ params }: { params: { recipe_id: string } }) {
               ))}
             </ul>
 
-            <h5 className="cormorant-bold text-4xl py-5 text-black">Missing</h5>
-            <ul className="list-disc pl-5 text-red-500">
-              {recipesDetail?.missingIngredients?.map((ing: any) => (
-                <li key={ing.id} className="flex items-center">
-                  <div>{ing.ingredientName}</div>
+            {session?.user?.subscription != null && (
+              <h5 className="cormorant-bold text-4xl py-5 text-black">
+                Missing
+              </h5>
+            )}
+            {session?.user?.subscription != null && (
+              <ul className="list-disc pl-5 text-red-500">
+                {recipesDetail?.missingIngredients?.map((ing: any) => (
+                  <li key={ing.id} className="flex items-center">
+                    <div>{ing.ingredientName}</div>
 
-                  {ing.isInShoppingList === false && (
-                    <button
-                      onClick={() => handleOpen(ing)}
-                      className="ml-2 text-red-500 hover:text-red-700"
-                    >
-                      <BiPlusCircle size={20} />
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <ConfirmAddShoppingList
-              open={openModal}
-              handleOpen={handleOpen}
-              ingredient={ingredientToShopping}
-              recipeName={recipesDetail?.recipe.name}
-              recipeId={recipesDetail?.recipe.id}
-              refreshRecipeDetails={refreshRecipeDetails}
-            />
+                    {ing.isInShoppingList === false && (
+                      <button
+                        onClick={() => handleOpen(ing)}
+                        className="ml-2 text-red-500 hover:text-red-700"
+                      >
+                        <BiPlusCircle size={20} />
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {session?.user?.subscription != null && (
+              <ConfirmAddShoppingList
+                open={openModal}
+                handleOpen={handleOpen}
+                ingredient={ingredientToShopping}
+                recipeName={recipesDetail?.recipe.name}
+                recipeId={recipesDetail?.recipe.id}
+                refreshRecipeDetails={refreshRecipeDetails}
+              />
+            )}
           </div>
         </div>
       </div>

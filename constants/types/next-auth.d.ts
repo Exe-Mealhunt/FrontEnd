@@ -18,6 +18,11 @@ declare module "next-auth" {
     email: string;
     role: string;
     fullName: string;
+    subscription: {
+      subscriptionPlanId: number;
+      endDate: string;
+      isCurrent: boolean;
+    } | null;
     accessToken: string;
   }
 }

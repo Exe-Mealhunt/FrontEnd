@@ -70,9 +70,11 @@ export default function Header() {
         <Link href="/recipes" className={isActive("/recipes")}>
           Recipes
         </Link>
-        <Link href="/blog" className={isActive("/blog")}>
-          Blog
-        </Link>
+        {session?.user?.subscription != null && (
+          <Link href="/blog" className={isActive("/blog")}>
+            Blog
+          </Link>
+        )}
       </div>
       <div className="navbar-end gap-x-8">
         {session ? (
